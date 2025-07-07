@@ -32,3 +32,4 @@ from quantum_as_a_service_api_client.models import (
 from quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1ProcessStatus as QaaSProcessStatus,
 )
+from .client import QaaSClient
