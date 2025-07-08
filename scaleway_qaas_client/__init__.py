@@ -45,7 +45,7 @@ from .quantum_as_a_service_api_client.models import (
 from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1ProcessStatus as QaaSProcessStatus,
 )
-from job_payload.models import (
+from .job_payload.models import (
     QaaSCircuitSerializationFormat,
     QaaSCircuitData,
     QaaSJobBackendData,
