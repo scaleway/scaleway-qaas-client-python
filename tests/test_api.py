@@ -12,77 +12,60 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import numpy as np
-import random
+import time
 
-from qiskit import QuantumCircuit
-from qiskit_scaleway import ScalewayProvider
+from scaleway_qaas_client import QaaSClient
 
 
-def _random_qiskit_circuit(size: int) -> QuantumCircuit:
-    num_qubits = size
-    num_gate = size
-
-    qc = QuantumCircuit(num_qubits)
-
-    for _ in range(num_gate):
-        random_gate = np.random.choice(["unitary", "cx", "cy", "cz"])
-
-        if random_gate == "cx" or random_gate == "cy" or random_gate == "cz":
-            control_qubit = np.random.randint(0, num_qubits)
-            target_qubit = np.random.randint(0, num_qubits)
-
-            while target_qubit == control_qubit:
-                target_qubit = np.random.randint(0, num_qubits)
-
-            getattr(qc, random_gate)(control_qubit, target_qubit)
-        else:
-            for q in range(num_qubits):
-                random_gate = np.random.choice(["h", "x", "y", "z"])
-                getattr(qc, random_gate)(q)
-
-    qc.measure_all()
-
-    return qc
-
-
-def test_aer_multiple_circuits():
-    provider = ScalewayProvider(
-        project_id=os.environ["QISKIT_SCALEWAY_PROJECT_ID"],
-        secret_key=os.environ["QISKIT_SCALEWAY_API_TOKEN"],
-        url=os.environ["QISKIT_SCALEWAY_API_URL"],
+def _get_client() -> QaaSClient:
+    client = QaaSClient(
+        project_id=os.environ["SCALEWAY_PROJECT_ID"],
+        secret_key=os.environ["SCALEWAY_API_TOKEN"],
+        url=os.environ["SCALEWAY_API_URL"],
     )
 
-    backend = provider.get_backend("aer_simulation_pop_c16m128")
+    return client
 
-    assert backend is not None
 
-    session_id = backend.start_session(
-        name="my-aer-session-autotest",
-        deduplication_id=f"my-aer-session-autotest-{random.randint(1, 1000)}",
-        max_duration="15m",
+def test_list_platform():
+    client = _get_client()
+
+    platforms = client.list_platforms()
+
+    assert platforms is not None
+    assert len(platforms) > 0
+
+
+def test_create_delete_session():
+    client = _get_client()
+
+    platforms = client.list_platforms(name="aer_simulation_pop_c16m128")
+
+    assert platforms is not None
+    assert len(platforms) == 1
+
+    target_platform = platforms[0]
+
+    assert target_platform.id is not None
+
+    session = client.create_session(
+        platform_id=target_platform.id, max_duration="2min", max_idle_duration="2min"
     )
 
-    assert session_id is not None
+    assert session is not None
+    assert session.id is not None
+    assert session.platform_id == target_platform.id
 
-    try:
-        qc1 = _random_qiskit_circuit(20)
-        qc2 = _random_qiskit_circuit(15)
-        qc3 = _random_qiskit_circuit(21)
-        qc4 = _random_qiskit_circuit(17)
+    while session.status == "starting":
+        session = client.get_session(session.id)
+        time.sleep(3)
 
-        run_result = backend.run(
-            [qc1, qc2, qc3, qc4],
-            shots=1000,
-            max_parallel_experiments=0,
-            session_id=session_id,
-        ).result()
+    assert session.status == "running"
 
-        results = run_result.results
+    session = client.terminate_session(session.id)
 
-        assert len(results) == 4
+    while session.status is not "cancelled":
+        session = client.get_session(session.id)
+        time.sleep(3)
 
-        for result in results:
-            assert result.success
-    finally:
-        backend.delete_session(session_id)
+    session = client.delete_session(session.id)
