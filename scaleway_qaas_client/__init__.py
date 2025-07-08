@@ -46,10 +46,11 @@ from quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1ProcessStatus as QaaSProcessStatus,
 )
 from job_payload.models import (
-    SerializationType,
-    CircuitData,
-    RunData,
-    BackendData,
-    ClientData,
+    QaaSCircuitSerializationFormat,
+    QaaSCircuitData,
+    QaaSJobBackendData,
+    QaaSJobClientData,
+    QaaSJobData,
+    QaaSJobRunData,
 )
 from .client import QaaSClient
