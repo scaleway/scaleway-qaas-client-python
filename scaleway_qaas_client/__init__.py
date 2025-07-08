@@ -28,6 +28,9 @@ from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1JobStatus as QaaSJobStatus,
 )
 from .quantum_as_a_service_api_client.models import (
+    ScalewayQaasV1Alpha1JobResult as QaaSJobResult,
+)
+from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1Session as QaaSSession,
 )
 from .quantum_as_a_service_api_client.models import (
