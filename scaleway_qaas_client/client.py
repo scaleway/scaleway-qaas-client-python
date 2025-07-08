@@ -58,11 +58,11 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_resu
 from scaleway_qaas_client.quantum_as_a_service_api_client.client import Client
 
 
-__DEFAULT_URL = "https://api.scaleway.com/qaas/v1alpha1"
+_DEFAULT_URL = "https://api.scaleway.com/qaas/v1alpha1"
 
 
 class QaaSClient:
-    def __init__(self, project_id: str, secret_key: str, url: str = __DEFAULT_URL):
+    def __init__(self, project_id: str, secret_key: str, url: str = _DEFAULT_URL):
         self.__project_id = project_id
 
         self.__client = Client(
@@ -71,6 +71,9 @@ class QaaSClient:
             timeout=10.0,
             verify_ssl="https" in url,
         )
+
+    def __repr__(self) -> str:
+        return f"<QaaSClient(url={self.__client._base_url},project_id={self.__project_id})>"
 
     def get_platform(self, platform_id: str) -> ScalewayQaasV1Alpha1Platform:
         platform = _get_platform_sync(client=self.__client, platform_id=platform_id)
