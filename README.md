@@ -25,24 +25,13 @@ client = QaaSClient(
 
 platforms = client.list_platforms(name="aer_simulation_pop_c16m128")
 
-assert platforms is not None
-assert len(platforms) == 1
-
 target_platform = platforms[0]
 
-assert target_platform.id is not None
-
 session = client.create_session(platform_id=target_platform.id, max_duration="2min", max_idle_duration="2min")
-
-assert session is not None
-assert session.id is not None
-assert session.platform_id == target_platform.id
 
 while session.status == "starting":
     session = client.get_session(session.id)
     time.sleep(3)
-
-assert session.status == "running"
 
 client.delete_session(session.id)
 ```
