@@ -16,7 +16,7 @@ import randomname
 
 from typing import List, Optional, Dict, Union
 
-from quantum_as_a_service_api_client.models import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
     CreateJobBody,
     CreateJobBodyCircuit,
     CreateSessionBody,
@@ -27,35 +27,35 @@ from quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1Session,
 )
 
-from quantum_as_a_service_api_client.api.sessions.create_session import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.create_session import (
     sync as _create_session_sync,
 )
-from quantum_as_a_service_api_client.api.sessions.get_session import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.get_session import (
     sync as _get_session_sync,
 )
-from quantum_as_a_service_api_client.api.sessions.terminate_session import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.terminate_session import (
     sync as _terminate_session_sync,
 )
-from quantum_as_a_service_api_client.api.sessions.delete_session import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.delete_session import (
     sync_detailed as _delete_session_sync,
 )
-from quantum_as_a_service_api_client.api.platforms.list_platforms import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.list_platforms import (
     sync as _list_platforms_sync,
 )
-from quantum_as_a_service_api_client.api.platforms.get_platform import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.get_platform import (
     sync as _get_platform_sync,
 )
-from quantum_as_a_service_api_client.api.jobs.create_job import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.create_job import (
     sync as _create_job_sync,
 )
-from quantum_as_a_service_api_client.api.jobs.get_job import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.get_job import (
     sync as _get_job_sync,
 )
-from quantum_as_a_service_api_client.api.jobs.list_job_results import (
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_results import (
     sync as _list_job_result_sync,
 )
 
-from quantum_as_a_service_api_client.client import Client
+from scaleway_qaas_client.quantum_as_a_service_api_client.client import Client
 
 
 __DEFAULT_URL = "https://api.scaleway.com/qaas/v1alpha1"
