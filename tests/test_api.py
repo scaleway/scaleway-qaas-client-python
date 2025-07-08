@@ -39,7 +39,9 @@ def test_list_platform():
 def test_create_delete_session():
     client = _get_client()
 
-    platforms = client.list_platforms(name="aer_simulation_pop_c16m128")
+    platforms = client.list_platforms(
+        name=os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")
+    )
 
     assert platforms is not None
     assert len(platforms) == 1
@@ -64,8 +66,10 @@ def test_create_delete_session():
 
     session = client.terminate_session(session.id)
 
-    while session.status is not "cancelled":
+    while session.status is "stopping":
         session = client.get_session(session.id)
         time.sleep(3)
 
-    session = client.delete_session(session.id)
+    assert session.status == "stopped"
+
+    client.delete_session(session.id)

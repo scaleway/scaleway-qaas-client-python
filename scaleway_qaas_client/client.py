@@ -1,3 +1,16 @@
+# Copyright 2025 Scaleway
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 import json
 import randomname
 
@@ -29,6 +42,9 @@ from quantum_as_a_service_api_client.api.sessions.delete_session import (
 from quantum_as_a_service_api_client.api.platforms.list_platforms import (
     sync as _list_platforms_sync,
 )
+from quantum_as_a_service_api_client.api.platforms.get_platform import (
+    sync as _get_platform_sync,
+)
 from quantum_as_a_service_api_client.api.jobs.create_job import (
     sync as _create_job_sync,
 )
@@ -56,7 +72,14 @@ class QaaSClient:
             verify_ssl="https" in url,
         )
 
-    def list_platforms(self, name: Optional[str]) -> List[ScalewayQaasV1Alpha1Platform]:
+    def get_platform(self, platform_id: str) -> ScalewayQaasV1Alpha1Platform:
+        platform = _get_platform_sync(client=self.__client, platform_id=platform_id)
+
+        return platform
+
+    def list_platforms(
+        self, name: Optional[str] = None
+    ) -> List[ScalewayQaasV1Alpha1Platform]:
         response = _list_platforms_sync(client=self.__client, name=name)
 
         assert response
