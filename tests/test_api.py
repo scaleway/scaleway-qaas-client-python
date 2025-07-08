@@ -66,7 +66,7 @@ def test_create_delete_session():
 
     session = client.terminate_session(session.id)
 
-    while session.status is "stopping":
+    while session.status == "stopping":
         session = client.get_session(session.id)
         time.sleep(3)
 
