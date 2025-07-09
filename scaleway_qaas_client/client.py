@@ -18,6 +18,7 @@ from typing import List, Optional, Dict, Union
 
 from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
     CreateJobBody,
+    CancelJobBody,
     CreateJobBodyCircuit,
     CreateSessionBody,
     TerminateSessionBody,
@@ -32,6 +33,9 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.create_se
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.get_session import (
     sync as _get_session_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.list_sessions import (
+    sync as _list_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.terminate_session import (
     sync as _terminate_session_sync,
@@ -51,25 +55,34 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.create_job im
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.get_job import (
     sync as _get_job_sync,
 )
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.cancel_job import (
+    sync as _cancel_job_sync,
+)
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_results import (
     sync as _list_job_result_sync,
 )
 
-from scaleway_qaas_client.quantum_as_a_service_api_client.client import Client
+from scaleway_qaas_client.quantum_as_a_service_api_client.client import (
+    Client,
+    AuthenticatedClient,
+)
 
 
-_DEFAULT_URL = "https://api.scaleway.com/qaas/v1alpha1"
+_DEFAULT_URL = "https://api.scaleway.com"
 
 
 class QaaSClient:
     def __init__(self, project_id: str, secret_key: str, url: str = _DEFAULT_URL):
         self.__project_id = project_id
 
-        self.__client = Client(
-            headers={"X-Auth-Token": secret_key},
+        self.__client = AuthenticatedClient(
+            # headers={"X-Auth-Token": secret_key},
             base_url=url,
             timeout=10.0,
             verify_ssl="https" in url,
+            token=secret_key,
+            prefix=None,
+            auth_header_name="X-Auth-Token",
         )
 
     def __repr__(self) -> str:
@@ -118,6 +131,19 @@ class QaaSClient:
 
         return session
 
+    def list_session(
+        self, platform_id: Optional[str] = None
+    ) -> List[ScalewayQaasV1Alpha1Session]:
+        response = _list_session_sync(
+            client=self.__client,
+            project_id=self.__project_id,
+            platform_id=platform_id
+        )
+
+        assert response
+
+        return response.sessions
+
     def terminate_session(self, session_id: str) -> ScalewayQaasV1Alpha1Session:
         session = _terminate_session_sync(
             client=self.__client,
@@ -160,3 +186,8 @@ class QaaSClient:
         response = _list_job_result_sync(client=self.__client, job_id=job_id)
 
         return response.job_results
+
+    def cancel_job(self, job_id: str) -> ScalewayQaasV1Alpha1Job:
+        job = _cancel_job_sync(client=self.__client, body=CancelJobBody(job_id=job_id))
+
+        return job
