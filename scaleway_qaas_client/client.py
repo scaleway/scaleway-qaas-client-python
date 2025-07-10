@@ -88,6 +88,7 @@ class QaaSClient:
             raise Exception("QaasClient: secret_key cannot be None")
 
         self.__project_id = project_id
+        url = url if url else _DEFAULT_URL
 
         self.__client = AuthenticatedClient(
             base_url=url,
