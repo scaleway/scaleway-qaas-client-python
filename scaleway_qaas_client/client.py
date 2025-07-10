@@ -14,14 +14,16 @@
 import json
 import randomname
 
+from pytimeparse.timeparse import timeparse
+
 from typing import List, Optional, Dict, Union
 
 from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
     CreateJobBody,
-    CancelJobBody,
     CreateJobBodyCircuit,
     CreateSessionBody,
     TerminateSessionBody,
+    CancelJobBody,
     ScalewayQaasV1Alpha1Platform,
     ScalewayQaasV1Alpha1Job,
     ScalewayQaasV1Alpha1JobResult,
@@ -29,46 +31,56 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
 )
 
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.create_session import (
-    sync as _create_session_sync,
+    sync_detailed as _create_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.get_session import (
-    sync as _get_session_sync,
+    sync_detailed as _get_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.list_sessions import (
-    sync as _list_session_sync,
+    sync_detailed as _list_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.terminate_session import (
-    sync as _terminate_session_sync,
+    sync_detailed as _terminate_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.delete_session import (
     sync_detailed as _delete_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.list_platforms import (
-    sync as _list_platforms_sync,
+    sync_detailed as _list_platforms_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.get_platform import (
-    sync as _get_platform_sync,
+    sync_detailed as _get_platform_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.create_job import (
-    sync as _create_job_sync,
+    sync_detailed as _create_job_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.get_job import (
-    sync as _get_job_sync,
+    sync_detailed as _get_job_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.cancel_job import (
-    sync as _cancel_job_sync,
+    sync_detailed as _cancel_job_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_results import (
-    sync as _list_job_result_sync,
+    sync_detailed as _list_job_result_sync,
 )
+from scaleway_qaas_client.quantum_as_a_service_api_client.types import Response
 
 from scaleway_qaas_client.quantum_as_a_service_api_client.client import (
-    Client,
     AuthenticatedClient,
 )
 
 
 _DEFAULT_URL = "https://api.scaleway.com"
+
+
+def _raise_on_error(response: Response):
+    if not response:
+        raise Exception("error: None response")
+
+    if response.status_code.is_server_error or response.status_code.is_client_error:
+        raise Exception(
+            f"error {response.status_code}: {response.content.decode("utf-8")}"
+        )
 
 
 class QaaSClient:
@@ -89,30 +101,38 @@ class QaaSClient:
         return f"<QaaSClient(url={self.__client._base_url},project_id={self.__project_id})>"
 
     def get_platform(self, platform_id: str) -> ScalewayQaasV1Alpha1Platform:
-        platform = _get_platform_sync(client=self.__client, platform_id=platform_id)
+        response = _get_platform_sync(client=self.__client, platform_id=platform_id)
 
-        return platform
+        _raise_on_error(response)
+
+        return response.parsed
 
     def list_platforms(
         self, name: Optional[str] = None
     ) -> List[ScalewayQaasV1Alpha1Platform]:
         response = _list_platforms_sync(client=self.__client, name=name)
 
-        assert response
+        _raise_on_error(response)
 
-        return response.platforms
+        return response.parsed.platforms
 
     def create_session(
         self,
         platform_id: str,
-        max_duration: str,
-        max_idle_duration: str,
+        max_duration: Union[str, int],
+        max_idle_duration: Union[str, int],
         deduplication_id: Optional[str] = None,
         name: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
         name = name if name else f"qs-{randomname.get_name()}"
 
-        session = _create_session_sync(
+        if isinstance(max_duration, str):
+            max_duration = f"{timeparse(max_duration)}s"
+
+        if isinstance(max_idle_duration, str):
+            max_idle_duration = f"{timeparse(max_idle_duration)}s"
+
+        response = _create_session_sync(
             client=self.__client,
             body=CreateSessionBody(
                 project_id=self.__project_id,
@@ -124,35 +144,38 @@ class QaaSClient:
             ),
         )
 
-        return session
+        _raise_on_error(response)
+
+        return response.parsed
 
     def get_session(self, session_id: str) -> ScalewayQaasV1Alpha1Session:
-        session = _get_session_sync(client=self.__client, session_id=session_id)
+        response = _get_session_sync(client=self.__client, session_id=session_id)
 
-        return session
+        _raise_on_error(response)
+
+        return response.parsed
 
     def list_session(
         self, platform_id: Optional[str] = None
     ) -> List[ScalewayQaasV1Alpha1Session]:
         response = _list_session_sync(
-            client=self.__client,
-            project_id=self.__project_id,
-            platform_id=platform_id
+            client=self.__client, project_id=self.__project_id, platform_id=platform_id
         )
 
-        assert response
+        _raise_on_error(response)
 
-        return response.sessions
+        return response.parsed.sessions
 
     def terminate_session(self, session_id: str) -> ScalewayQaasV1Alpha1Session:
-        session = _terminate_session_sync(
+        response = _terminate_session_sync(
             client=self.__client,
-            body=TerminateSessionBody(
-                session_id=session_id,
-            ),
+            session_id=session_id,
+            body=TerminateSessionBody(),
         )
 
-        return session
+        _raise_on_error(response)
+
+        return response.parsed
 
     def delete_session(self, session_id: str):
         _delete_session_sync(client=self.__client, session_id=session_id)
@@ -166,7 +189,7 @@ class QaaSClient:
         payload = payload if isinstance(payload, str) else json.dumps(payload)
         name = name if name else f"qj-{randomname.get_name()}"
 
-        job = _create_job_sync(
+        response = _create_job_sync(
             client=self.__client,
             body=CreateJobBody(
                 name=name,
@@ -175,19 +198,31 @@ class QaaSClient:
             ),
         )
 
-        return job
+        _raise_on_error(response)
+
+        return response.parsed
 
     def get_job(self, job_id: str) -> ScalewayQaasV1Alpha1Job:
-        job = _get_job_sync(client=self.__client, job_id=job_id)
+        response = _get_job_sync(client=self.__client, job_id=job_id)
 
-        return job
+        _raise_on_error(response)
+
+        return response.parsed
 
     def list_job_results(self, job_id: str) -> List[ScalewayQaasV1Alpha1JobResult]:
         response = _list_job_result_sync(client=self.__client, job_id=job_id)
 
-        return response.job_results
+        _raise_on_error(response)
+
+        return response.parsed.job_results
 
     def cancel_job(self, job_id: str) -> ScalewayQaasV1Alpha1Job:
-        job = _cancel_job_sync(client=self.__client, body=CancelJobBody(job_id=job_id))
+        response = _cancel_job_sync(
+            client=self.__client,
+            job_id=job_id,
+            body=CancelJobBody(),
+        )
 
-        return job
+        _raise_on_error(response)
+
+        return response.parsed

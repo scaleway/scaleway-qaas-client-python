@@ -51,7 +51,7 @@ def test_create_delete_session():
     assert target_platform.id is not None
 
     session = client.create_session(
-        platform_id=target_platform.id, max_duration="2min", max_idle_duration="2min"
+        platform_id=target_platform.id, max_duration="2m", max_idle_duration="2m"
     )
 
     assert session is not None
