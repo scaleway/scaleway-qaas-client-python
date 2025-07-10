@@ -90,6 +90,8 @@ class QaaSClient:
         self.__project_id = project_id
         url = url if url else _DEFAULT_URL
 
+        print(url)
+
         self.__client = AuthenticatedClient(
             base_url=url,
             timeout=10.0,
