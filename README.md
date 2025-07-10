@@ -1,6 +1,8 @@
-# Scaleway Pyhon client for Quantum as a Service
+# Scaleway Python client for Quantum as a Service
 
+This Python package is basically a HTTPX client based on Pydantic over the [Quantum as a Service API](https://www.scaleway.com/en/developers/api/qaas/).
 
+This package is intented to be used from quantum circuit SDK such as Qiskit, Cirq, Perceval and so-on.
 
 ## Installation
 
