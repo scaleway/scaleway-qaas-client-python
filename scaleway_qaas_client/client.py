@@ -45,7 +45,7 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.get_sessi
     sync_detailed as _get_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.list_sessions import (
-    sync_detailed as _list_session_sync,
+    sync_detailed as _list_sessions_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.terminate_session import (
     sync_detailed as _terminate_session_sync,
@@ -81,10 +81,15 @@ def _raise_on_error(response: Response):
 
 class QaaSClient:
     def __init__(self, project_id: str, secret_key: str, url: str = _DEFAULT_URL):
+        if not project_id:
+            raise Exception("QaasClient: project_id cannot be None")
+
+        if not secret_key:
+            raise Exception("QaasClient: secret_key cannot be None")
+
         self.__project_id = project_id
 
         self.__client = AuthenticatedClient(
-            # headers={"X-Auth-Token": secret_key},
             base_url=url,
             timeout=10.0,
             verify_ssl="https" in url,
@@ -113,6 +118,9 @@ class QaaSClient:
     """
 
     def get_platform(self, platform_id: str) -> ScalewayQaasV1Alpha1Platform:
+        if not platform_id:
+            raise Exception("get_platform: platform_id cannot be None")
+
         response = _get_platform_sync(client=self.__client, platform_id=platform_id)
 
         _raise_on_error(response)
@@ -166,6 +174,9 @@ class QaaSClient:
         deduplication_id: Optional[str] = None,
         name: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
+        if not platform_id:
+            raise Exception("create_session: platform_id cannot be None")
+
         name = name if name else f"qs-{randomname.get_name()}"
 
         if isinstance(max_duration, str):
@@ -207,16 +218,44 @@ class QaaSClient:
     """
 
     def get_session(self, session_id: str) -> ScalewayQaasV1Alpha1Session:
+        if not session_id:
+            raise Exception("get_session: session_id cannot be None")
+
         response = _get_session_sync(client=self.__client, session_id=session_id)
 
         _raise_on_error(response)
 
         return response.parsed
 
-    def list_session(
+    """List all sessions
+
+     Retrieve information about all sessions.
+
+    Args:
+        platform_id (Union[Unset, str]): List sessions that have been created for this platform.
+        tags (Union[Unset, list[str]]): List sessions with these tags.
+        page (Union[Unset, int]): Page number.
+        page_size (Union[Unset, int]): Maximum number of sessions to return per page.
+        order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
+            Default: ListSessionsOrderBy.NAME_ASC.
+        project_id (str): List sessions belonging to this project ID. (UUID format) Example:
+            6170692e-7363-616c-6577-61792e636f6d.
+
+    Raises:
+        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+        httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+    Returns:
+        List[ScalewayQaasV1Alpha1ListSessionsResponse]
+    """
+
+    def list_sessions(
         self, platform_id: Optional[str] = None
     ) -> List[ScalewayQaasV1Alpha1Session]:
-        response = _list_session_sync(
+        if not platform_id:
+            raise Exception("list_session: platform_id cannot be None")
+
+        response = _list_sessions_sync(
             client=self.__client, project_id=self.__project_id, platform_id=platform_id
         )
 
@@ -241,6 +280,9 @@ class QaaSClient:
     """
 
     def terminate_session(self, session_id: str) -> ScalewayQaasV1Alpha1Session:
+        if not session_id:
+            raise Exception("terminate_session: session_id cannot be None")
+
         response = _terminate_session_sync(
             client=self.__client,
             session_id=session_id,
@@ -264,6 +306,9 @@ class QaaSClient:
     """
 
     def delete_session(self, session_id: str):
+        if not session_id:
+            raise Exception("delete_session: session_id cannot be None")
+
         _delete_session_sync(client=self.__client, session_id=session_id)
 
     """Create a job
@@ -287,6 +332,12 @@ class QaaSClient:
         payload: Union[Dict, List, str],
         name: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Job:
+        if not session_id:
+            raise Exception("create_job: session_id cannot be None")
+
+        if not payload:
+            raise Exception("create_job: payload cannot be None")
+
         payload = payload if isinstance(payload, str) else json.dumps(payload)
         name = name if name else f"qj-{randomname.get_name()}"
 
@@ -319,6 +370,9 @@ class QaaSClient:
     """
 
     def get_job(self, job_id: str) -> ScalewayQaasV1Alpha1Job:
+        if not job_id:
+            raise Exception("get_job: job_id cannot be None")
+
         response = _get_job_sync(client=self.__client, job_id=job_id)
 
         _raise_on_error(response)
@@ -341,6 +395,9 @@ class QaaSClient:
     """
 
     def list_job_results(self, job_id: str) -> List[ScalewayQaasV1Alpha1JobResult]:
+        if not job_id:
+            raise Exception("list_job_results: job_id cannot be None")
+
         response = _list_job_result_sync(client=self.__client, job_id=job_id)
 
         _raise_on_error(response)
@@ -364,6 +421,9 @@ class QaaSClient:
     """
 
     def cancel_job(self, job_id: str) -> ScalewayQaasV1Alpha1Job:
+        if not job_id:
+            raise Exception("cancel_job: job_id cannot be None")
+
         response = _cancel_job_sync(
             client=self.__client,
             job_id=job_id,
