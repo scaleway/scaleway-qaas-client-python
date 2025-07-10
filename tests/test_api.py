@@ -19,6 +19,7 @@ from scaleway_qaas_client import QaaSClient
 
 _RANDOM_UUID = str(uuid.uuid4())
 
+
 def _get_client() -> QaaSClient:
     client = QaaSClient(
         project_id=os.environ["SCALEWAY_PROJECT_ID"],
@@ -75,6 +76,7 @@ def test_create_delete_session():
     assert session.status == "stopped"
 
     client.delete_session(session.id)
+
 
 # def test_list_platforms_by_backend(self):
 #     if self._PLATFORM_NAME.startswith("qsim"):
