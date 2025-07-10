@@ -49,7 +49,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[ScalewayQaasV1Alpha1Process]:
-    """Get process infrormation
+    """Get process information
 
      Retrieve information about the provided **process ID**, such as name, status and progress.
 
@@ -80,7 +80,7 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> Optional[ScalewayQaasV1Alpha1Process]:
-    """Get process infrormation
+    """Get process information
 
      Retrieve information about the provided **process ID**, such as name, status and progress.
 
@@ -106,7 +106,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[ScalewayQaasV1Alpha1Process]:
-    """Get process infrormation
+    """Get process information
 
      Retrieve information about the provided **process ID**, such as name, status and progress.
 
@@ -135,7 +135,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> Optional[ScalewayQaasV1Alpha1Process]:
-    """Get process infrormation
+    """Get process information
 
      Retrieve information about the provided **process ID**, such as name, status and progress.
 

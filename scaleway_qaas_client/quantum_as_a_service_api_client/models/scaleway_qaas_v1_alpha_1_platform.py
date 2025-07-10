@@ -16,6 +16,9 @@ from ..models.scaleway_qaas_v1_alpha_1_platform_type import (
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.scaleway_qaas_v1_alpha_1_platform_booking_requirement import (
+        ScalewayQaasV1Alpha1PlatformBookingRequirement,
+    )
     from ..models.scaleway_qaas_v1_alpha_1_platform_hardware import (
         ScalewayQaasV1Alpha1PlatformHardware,
     )
@@ -59,6 +62,12 @@ class ScalewayQaasV1Alpha1Platform:
         price_per_circuit (Union[Unset, ScalewayQaasV1Alpha1PlatformPricePerCircuit]): Price to be paid per circuit
             setup before its execution (excluding free tiers).
         hardware (Union[Unset, ScalewayQaasV1Alpha1PlatformHardware]): Specifications of the underlying hardware.
+        booking_requirement (Union[Unset, ScalewayQaasV1Alpha1PlatformBookingRequirement]): Booking constraints to fit
+            if the platform is bookable.
+        description (Union[Unset, str]): English description of the platform.
+        documentation_url (Union[Unset, str]): Documentation link to external documentation to learn more on this
+            platform.
+        is_bookable (Union[Unset, bool]): Specify if the platform is bookable.
     """
 
     id: Union[Unset, str] = UNSET
@@ -85,6 +94,12 @@ class ScalewayQaasV1Alpha1Platform:
         UNSET
     )
     hardware: Union[Unset, "ScalewayQaasV1Alpha1PlatformHardware"] = UNSET
+    booking_requirement: Union[
+        Unset, "ScalewayQaasV1Alpha1PlatformBookingRequirement"
+    ] = UNSET
+    description: Union[Unset, str] = UNSET
+    documentation_url: Union[Unset, str] = UNSET
+    is_bookable: Union[Unset, bool] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -134,6 +149,16 @@ class ScalewayQaasV1Alpha1Platform:
         if not isinstance(self.hardware, Unset):
             hardware = self.hardware.to_dict()
 
+        booking_requirement: Union[Unset, dict[str, Any]] = UNSET
+        if not isinstance(self.booking_requirement, Unset):
+            booking_requirement = self.booking_requirement.to_dict()
+
+        description = self.description
+
+        documentation_url = self.documentation_url
+
+        is_bookable = self.is_bookable
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -169,11 +194,22 @@ class ScalewayQaasV1Alpha1Platform:
             field_dict["price_per_circuit"] = price_per_circuit
         if hardware is not UNSET:
             field_dict["hardware"] = hardware
+        if booking_requirement is not UNSET:
+            field_dict["booking_requirement"] = booking_requirement
+        if description is not UNSET:
+            field_dict["description"] = description
+        if documentation_url is not UNSET:
+            field_dict["documentation_url"] = documentation_url
+        if is_bookable is not UNSET:
+            field_dict["is_bookable"] = is_bookable
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.scaleway_qaas_v1_alpha_1_platform_booking_requirement import (
+            ScalewayQaasV1Alpha1PlatformBookingRequirement,
+        )
         from ..models.scaleway_qaas_v1_alpha_1_platform_hardware import (
             ScalewayQaasV1Alpha1PlatformHardware,
         )
@@ -261,6 +297,25 @@ class ScalewayQaasV1Alpha1Platform:
         else:
             hardware = ScalewayQaasV1Alpha1PlatformHardware.from_dict(_hardware)
 
+        _booking_requirement = d.pop("booking_requirement", UNSET)
+        booking_requirement: Union[
+            Unset, ScalewayQaasV1Alpha1PlatformBookingRequirement
+        ]
+        if isinstance(_booking_requirement, Unset):
+            booking_requirement = UNSET
+        else:
+            booking_requirement = (
+                ScalewayQaasV1Alpha1PlatformBookingRequirement.from_dict(
+                    _booking_requirement
+                )
+            )
+
+        description = d.pop("description", UNSET)
+
+        documentation_url = d.pop("documentation_url", UNSET)
+
+        is_bookable = d.pop("is_bookable", UNSET)
+
         scaleway_qaas_v1_alpha_1_platform = cls(
             id=id,
             version=version,
@@ -278,6 +333,10 @@ class ScalewayQaasV1Alpha1Platform:
             price_per_shot=price_per_shot,
             price_per_circuit=price_per_circuit,
             hardware=hardware,
+            booking_requirement=booking_requirement,
+            description=description,
+            documentation_url=documentation_url,
+            is_bookable=is_bookable,
         )
 
         scaleway_qaas_v1_alpha_1_platform.additional_properties = d

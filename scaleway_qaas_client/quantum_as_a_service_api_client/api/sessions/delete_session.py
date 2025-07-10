@@ -48,7 +48,7 @@ def sync_detailed(
 ) -> Response[Any]:
     """Delete an existing session
 
-     Delete a session by its unique ID and delete all its attached jobs.
+     Delete a session by its unique ID and delete all its attached job and booking.
 
     Args:
         session_id (str): Unique ID of the session.
@@ -79,7 +79,7 @@ async def asyncio_detailed(
 ) -> Response[Any]:
     """Delete an existing session
 
-     Delete a session by its unique ID and delete all its attached jobs.
+     Delete a session by its unique ID and delete all its attached job and booking.
 
     Args:
         session_id (str): Unique ID of the session.

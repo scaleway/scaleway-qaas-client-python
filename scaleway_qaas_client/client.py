@@ -12,26 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import json
-import randomname
+from typing import Dict, List, Optional, Union
 
+import randomname
 from pytimeparse.timeparse import timeparse
 
-from typing import List, Optional, Dict, Union
-
-from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
-    CreateJobBody,
-    CreateJobBodyCircuit,
-    CreateSessionBody,
-    TerminateSessionBody,
-    CancelJobBody,
-    ScalewayQaasV1Alpha1Platform,
-    ScalewayQaasV1Alpha1Job,
-    ScalewayQaasV1Alpha1JobResult,
-    ScalewayQaasV1Alpha1Session,
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.cancel_job import (
+    sync_detailed as _cancel_job_sync,
 )
-
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.create_job import (
+    sync_detailed as _create_job_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.get_job import (
+    sync_detailed as _get_job_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_results import (
+    sync_detailed as _list_job_result_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.get_platform import (
+    sync_detailed as _get_platform_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.list_platforms import (
+    sync_detailed as _list_platforms_sync,
+)
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.create_session import (
     sync_detailed as _create_session_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.delete_session import (
+    sync_detailed as _delete_session_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.get_session import (
     sync_detailed as _get_session_sync,
@@ -42,33 +50,21 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.list_sess
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.terminate_session import (
     sync_detailed as _terminate_session_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.delete_session import (
-    sync_detailed as _delete_session_sync,
-)
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.list_platforms import (
-    sync_detailed as _list_platforms_sync,
-)
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.get_platform import (
-    sync_detailed as _get_platform_sync,
-)
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.create_job import (
-    sync_detailed as _create_job_sync,
-)
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.get_job import (
-    sync_detailed as _get_job_sync,
-)
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.cancel_job import (
-    sync_detailed as _cancel_job_sync,
-)
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_results import (
-    sync_detailed as _list_job_result_sync,
-)
-from scaleway_qaas_client.quantum_as_a_service_api_client.types import Response
-
 from scaleway_qaas_client.quantum_as_a_service_api_client.client import (
     AuthenticatedClient,
 )
-
+from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
+    CancelJobBody,
+    CreateJobBody,
+    CreateJobBodyCircuit,
+    CreateSessionBody,
+    ScalewayQaasV1Alpha1Job,
+    ScalewayQaasV1Alpha1JobResult,
+    ScalewayQaasV1Alpha1Platform,
+    ScalewayQaasV1Alpha1Session,
+    TerminateSessionBody,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.types import Response
 
 _DEFAULT_URL = "https://api.scaleway.com"
 
@@ -79,7 +75,7 @@ def _raise_on_error(response: Response):
 
     if response.status_code.is_server_error or response.status_code.is_client_error:
         raise Exception(
-            f"error {response.status_code}: {response.content.decode("utf-8")}"
+            f"error {response.status_code}: {response.content.decode('utf-8')}"
         )
 
 

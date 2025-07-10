@@ -5,26 +5,36 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.scaleway_qaas_v1_alpha_1_session import ScalewayQaasV1Alpha1Session
+from ...models.scaleway_qaas_v1_alpha_1_booking import ScalewayQaasV1Alpha1Booking
+from ...models.update_booking_body import UpdateBookingBody
 from ...types import Response
 
 
 def _get_kwargs(
-    session_id: str,
+    booking_id: str,
+    *,
+    body: UpdateBookingBody,
 ) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
+
     _kwargs: dict[str, Any] = {
-        "method": "get",
-        "url": f"/qaas/v1alpha1/sessions/{session_id}",
+        "method": "patch",
+        "url": f"/qaas/v1alpha1/bookings/{booking_id}",
     }
 
+    _kwargs["json"] = body.to_dict()
+
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
     return _kwargs
 
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[ScalewayQaasV1Alpha1Session]:
+) -> Optional[ScalewayQaasV1Alpha1Booking]:
     if response.status_code == 200:
-        response_200 = ScalewayQaasV1Alpha1Session.from_dict(response.json())
+        response_200 = ScalewayQaasV1Alpha1Booking.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -35,7 +45,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[ScalewayQaasV1Alpha1Session]:
+) -> Response[ScalewayQaasV1Alpha1Booking]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -45,28 +55,30 @@ def _build_response(
 
 
 def sync_detailed(
-    session_id: str,
+    booking_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[ScalewayQaasV1Alpha1Session]:
-    """Get session information
+    body: UpdateBookingBody,
+) -> Response[ScalewayQaasV1Alpha1Booking]:
+    """Update booking information
 
-     Retrieve information about the provided **session ID**, such as name, status, and number of executed
-    jobs.
+     Update booking information of the provided **booking ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        booking_id (str): Unique ID of the booking.
+        body (UpdateBookingBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ScalewayQaasV1Alpha1Session]
+        Response[ScalewayQaasV1Alpha1Booking]
     """
 
     kwargs = _get_kwargs(
-        session_id=session_id,
+        booking_id=booking_id,
+        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -77,55 +89,59 @@ def sync_detailed(
 
 
 def sync(
-    session_id: str,
+    booking_id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[ScalewayQaasV1Alpha1Session]:
-    """Get session information
+    body: UpdateBookingBody,
+) -> Optional[ScalewayQaasV1Alpha1Booking]:
+    """Update booking information
 
-     Retrieve information about the provided **session ID**, such as name, status, and number of executed
-    jobs.
+     Update booking information of the provided **booking ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        booking_id (str): Unique ID of the booking.
+        body (UpdateBookingBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ScalewayQaasV1Alpha1Session
+        ScalewayQaasV1Alpha1Booking
     """
 
     return sync_detailed(
-        session_id=session_id,
+        booking_id=booking_id,
         client=client,
+        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
-    session_id: str,
+    booking_id: str,
     *,
     client: AuthenticatedClient,
-) -> Response[ScalewayQaasV1Alpha1Session]:
-    """Get session information
+    body: UpdateBookingBody,
+) -> Response[ScalewayQaasV1Alpha1Booking]:
+    """Update booking information
 
-     Retrieve information about the provided **session ID**, such as name, status, and number of executed
-    jobs.
+     Update booking information of the provided **booking ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        booking_id (str): Unique ID of the booking.
+        body (UpdateBookingBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ScalewayQaasV1Alpha1Session]
+        Response[ScalewayQaasV1Alpha1Booking]
     """
 
     kwargs = _get_kwargs(
-        session_id=session_id,
+        booking_id=booking_id,
+        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -134,29 +150,31 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    session_id: str,
+    booking_id: str,
     *,
     client: AuthenticatedClient,
-) -> Optional[ScalewayQaasV1Alpha1Session]:
-    """Get session information
+    body: UpdateBookingBody,
+) -> Optional[ScalewayQaasV1Alpha1Booking]:
+    """Update booking information
 
-     Retrieve information about the provided **session ID**, such as name, status, and number of executed
-    jobs.
+     Update booking information of the provided **booking ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        booking_id (str): Unique ID of the booking.
+        body (UpdateBookingBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ScalewayQaasV1Alpha1Session
+        ScalewayQaasV1Alpha1Booking
     """
 
     return (
         await asyncio_detailed(
-            session_id=session_id,
+            booking_id=booking_id,
             client=client,
+            body=body,
         )
     ).parsed

@@ -3,6 +3,7 @@ from enum import Enum
 
 class ListPlatformsPlatformTechnology(str, Enum):
     GENERAL_PURPOSE = "general_purpose"
+    NEUTRAL_ATOM = "neutral_atom"
     PHOTONIC = "photonic"
     SUPERCONDUCTING = "superconducting"
     TRAPPED_ION = "trapped_ion"

@@ -1,10 +1,16 @@
 from collections.abc import Mapping
-from typing import Any, TypeVar, Union, cast
+from typing import TYPE_CHECKING, Any, TypeVar, Union, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.create_session_body_booking_demand import (
+        CreateSessionBodyBookingDemand,
+    )
+
 
 T = TypeVar("T", bound="CreateSessionBody")
 
@@ -22,6 +28,8 @@ class CreateSessionBody:
         max_duration (Union[None, Unset, str]): Maximum duration before the session ends. (in seconds) Example: 2.5s.
         tags (Union[None, Unset, list[str]]): Tags of the session.
         deduplication_id (Union[None, Unset, str]): Deduplication ID of the session.
+        booking_demand (Union[Unset, CreateSessionBodyBookingDemand]): A booking demand to schedule the session, only
+            applicable if the platform is bookable.
     """
 
     project_id: str
@@ -31,6 +39,7 @@ class CreateSessionBody:
     max_duration: Union[None, Unset, str] = UNSET
     tags: Union[None, Unset, list[str]] = UNSET
     deduplication_id: Union[None, Unset, str] = UNSET
+    booking_demand: Union[Unset, "CreateSessionBodyBookingDemand"] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -71,6 +80,10 @@ class CreateSessionBody:
         else:
             deduplication_id = self.deduplication_id
 
+        booking_demand: Union[Unset, dict[str, Any]] = UNSET
+        if not isinstance(self.booking_demand, Unset):
+            booking_demand = self.booking_demand.to_dict()
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -89,11 +102,17 @@ class CreateSessionBody:
             field_dict["tags"] = tags
         if deduplication_id is not UNSET:
             field_dict["deduplication_id"] = deduplication_id
+        if booking_demand is not UNSET:
+            field_dict["booking_demand"] = booking_demand
 
         return field_dict
 
     @classmethod
     def from_dict(cls: type[T], src_dict: Mapping[str, Any]) -> T:
+        from ..models.create_session_body_booking_demand import (
+            CreateSessionBodyBookingDemand,
+        )
+
         d = dict(src_dict)
         project_id = d.pop("project_id")
 
@@ -152,6 +171,13 @@ class CreateSessionBody:
 
         deduplication_id = _parse_deduplication_id(d.pop("deduplication_id", UNSET))
 
+        _booking_demand = d.pop("booking_demand", UNSET)
+        booking_demand: Union[Unset, CreateSessionBodyBookingDemand]
+        if isinstance(_booking_demand, Unset):
+            booking_demand = UNSET
+        else:
+            booking_demand = CreateSessionBodyBookingDemand.from_dict(_booking_demand)
+
         create_session_body = cls(
             project_id=project_id,
             platform_id=platform_id,
@@ -160,6 +186,7 @@ class CreateSessionBody:
             max_duration=max_duration,
             tags=tags,
             deduplication_id=deduplication_id,
+            booking_demand=booking_demand,
         )
 
         create_session_body.additional_properties = d

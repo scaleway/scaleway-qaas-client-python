@@ -62,7 +62,7 @@ def sync_detailed(
 ) -> Response[ScalewayQaasV1Alpha1Session]:
     """Terminate an existing session
 
-     Terminate a session by its unique ID and cancel all its attached jobs.
+     Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
         session_id (str): Unique ID of the session.
@@ -96,7 +96,7 @@ def sync(
 ) -> Optional[ScalewayQaasV1Alpha1Session]:
     """Terminate an existing session
 
-     Terminate a session by its unique ID and cancel all its attached jobs.
+     Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
         session_id (str): Unique ID of the session.
@@ -125,7 +125,7 @@ async def asyncio_detailed(
 ) -> Response[ScalewayQaasV1Alpha1Session]:
     """Terminate an existing session
 
-     Terminate a session by its unique ID and cancel all its attached jobs.
+     Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
         session_id (str): Unique ID of the session.
@@ -157,7 +157,7 @@ async def asyncio(
 ) -> Optional[ScalewayQaasV1Alpha1Session]:
     """Terminate an existing session
 
-     Terminate a session by its unique ID and cancel all its attached jobs.
+     Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
         session_id (str): Unique ID of the session.
