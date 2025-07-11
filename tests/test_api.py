@@ -24,7 +24,7 @@ _TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c
 def _get_client() -> QaaSClient:
     client = QaaSClient(
         project_id=os.environ["SCALEWAY_PROJECT_ID"],
-        secret_key=os.environ["SCALEWAY_API_TOKEN"],
+        secret_key=os.environ["SCALEWAY_SECRET_KEY"],
         url=os.environ["SCALEWAY_API_URL"],
     )
 
@@ -88,7 +88,7 @@ def test_list_platforms_by_backend(self):
         assert platform.backend_name == "aer"
 
 
-def test_list_platforms_by_provider(self):
+def test_list_platforms_by_provider():
     client = _get_client()
 
     platforms = client.list_platforms(provider_name="quandela")
@@ -99,7 +99,7 @@ def test_list_platforms_by_provider(self):
         assert platform.provider_name == "quandela"
 
 
-def test_list_platforms_by_unexisting_provider(self):
+def test_list_platforms_by_unexisting_provider():
     client = _get_client()
 
     platforms = client.list_platforms(provider_name="aksjdkhjqw")
@@ -107,7 +107,7 @@ def test_list_platforms_by_unexisting_provider(self):
     assert platforms == []
 
 
-def test_list_platforms_by_unexisting_backend(self):
+def test_list_platforms_by_unexisting_backend():
     client = _get_client()
 
     platforms = client.list_platforms(backend_name="129837yiuhjdwksad")
@@ -115,7 +115,7 @@ def test_list_platforms_by_unexisting_backend(self):
     assert platforms == []
 
 
-def test_list_platforms_by_name(self):
+def test_list_platforms_by_name():
     client = _get_client()
 
     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
@@ -126,7 +126,7 @@ def test_list_platforms_by_name(self):
     assert len(platforms) > 0
 
 
-def test_list_platforms_by_unexisting_name(self):
+def test_list_platforms_by_unexisting_name():
     client = _get_client()
 
     platforms = client.list_platforms(name="w3219380ijskd")
