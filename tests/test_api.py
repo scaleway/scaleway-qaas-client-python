@@ -18,6 +18,7 @@ import uuid
 from scaleway_qaas_client import QaaSClient
 
 _RANDOM_UUID = str(uuid.uuid4())
+_TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")
 
 
 def _get_client() -> QaaSClient:
@@ -42,9 +43,7 @@ def test_list_platform():
 def test_create_delete_session():
     client = _get_client()
 
-    platforms = client.list_platforms(
-        name=os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")
-    )
+    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
     assert platforms is not None
     assert len(platforms) == 1
@@ -78,93 +77,62 @@ def test_create_delete_session():
     client.delete_session(session.id)
 
 
-# def test_list_platforms_by_backend(self):
-#     if self._PLATFORM_NAME.startswith("qsim"):
-#         backend_name = "qsim"
-#     elif self._PLATFORM_NAME.startswith("aer"):
-#         backend_name = "aer"
+def test_list_platforms_by_backend(self):
+    client = _get_client()
 
-#     platforms = self._client.list_platforms(backend_name=backend_name)
+    platforms = client.list_platforms(backend_name="aer")
 
-#     for platform in platforms:
-#         assert platform.backend_name == backend_name
+    assert len(platforms) > 0
 
-#     assert len(platforms) > 0
+    for platform in platforms:
+        assert platform.backend_name == "aer"
 
-# def test_list_platforms_by_provider(self):
-#     provider_name = "qiskit"
-#     platforms = self._client.list_platforms(provider_name=provider_name)
 
-#     for platform in platforms:
-#         assert platform.provider_name == provider_name
-#     assert len(platforms) > 0
+def test_list_platforms_by_provider(self):
+    client = _get_client()
 
-# def test_list_platforms_by_unexisting_provider(self):
-#     platforms = self._client.list_platforms(provider_name=random_name())
+    platforms = client.list_platforms(provider_name="quandela")
 
-#     assert platforms == []
+    assert len(platforms) > 0
 
-# def test_list_platforms_by_unexisting_backend(self):
-#     platforms = self._client.list_platforms(backend_name=random_name())
+    for platform in platforms:
+        assert platform.provider_name == "quandela"
 
-#     assert platforms == []
 
-# def test_list_platforms_by_name(self):
-#     name = self._PLATFORM_NAME
-#     platforms = self._client.list_platforms(name=name)
+def test_list_platforms_by_unexisting_provider(self):
+    client = _get_client()
 
-#     for platform in platforms:
-#         assert platform.name == name
-#     assert len(platforms) > 0
+    platforms = client.list_platforms(provider_name="aksjdkhjqw")
 
-# def test_list_platforms_by_unexisting_name(self):
-#     platforms = self._client.list_platforms(name=random_name())
+    assert platforms == []
 
-#     assert platforms == []
 
-# def test_list_platforms_by_technology(self):
-#     technology = PlatformTechnology.GENERAL_PURPOSE
-#     platforms = self._client.list_platforms(technology=technology)
+def test_list_platforms_by_unexisting_backend(self):
+    client = _get_client()
 
-#     for platform in platforms:
-#         assert platform.technology == technology
-#     assert len(platforms) > 0
+    platforms = client.list_platforms(backend_name="129837yiuhjdwksad")
 
-# def test_get_platform(self):
-#     platform = self._client.get_platform(self._PLATFORM_ID)
+    assert platforms == []
 
-#     assert platform.id == self._PLATFORM_ID
 
-# def test_get_unexisting_platform(self):
-#     platform = self._client.get_platform(self._RANDOM_UUID)
+def test_list_platforms_by_name(self):
+    client = _get_client()
 
-#     assert platform == None
+    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-# def test_list_platforms_by_provider(self):
-#     provider_name = "quandela"
-#     platforms = self._client.list_platforms(provider_name=provider_name)
+    for platform in platforms:
+        assert platform.name == _TEST_PLATFORM_NAME
 
-#     for platform in platforms:
-#         assert platform.provider_name == provider_name
-#     assert len(platforms) > 0
+    assert len(platforms) > 0
 
-# def test_list_platforms_by_unexisting_provider(self):
-#     platforms = self._client.list_platforms(provider_name=random_name())
 
-#     assert platforms == []
+def test_list_platforms_by_unexisting_name(self):
+    client = _get_client()
 
-# def test_list_platforms_by_name(self):
-#     name = self._PLATFORM_NAME
-#     platforms = self._client.list_platforms(name=name)
+    platforms = client.list_platforms(name="w3219380ijskd")
 
-#     for platform in platforms:
-#         assert platform.name == name
-#     assert len(platforms) > 0
+    assert platforms == []
 
-# def test_list_platforms_by_unexisting_name(self):
-#     platforms = self._client.list_platforms(name=random_name())
-
-#     assert platforms == []
 
 # def test_list_platforms_by_type(self):
 #     type = PlatformType.SIMULATOR
@@ -188,16 +156,6 @@ def test_create_delete_session():
 #     for platform in platforms:
 #         assert platform.technology == technology
 #     assert len(platforms) > 0
-
-# def test_get_platform(self):
-#     platform = self._client.get_platform(self._PLATFORM_ID)
-
-#     assert platform.id == self._PLATFORM_ID
-
-# def test_get_unexisting_platform(self):
-#     platform = self._client.get_platform(self._RANDOM_UUID)
-
-#     assert platform == None
 
 # #
 # # Applications tests

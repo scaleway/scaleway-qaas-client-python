@@ -102,23 +102,23 @@ class QaaSClient:
     def __repr__(self) -> str:
         return f"<QaaSClient(url={self.__client._base_url},project_id={self.__project_id})>"
 
-    """Get platform information
-
-     Retrieve information about the provided **platform ID**, such as provider name, technology, and
-    type.
-
-    Args:
-        platform_id (str): Unique ID of the platform.
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        ScalewayQaasV1Alpha1Platform
-    """
-
     def get_platform(self, platform_id: str) -> ScalewayQaasV1Alpha1Platform:
+        """Get platform information
+
+        Retrieve information about the provided **platform ID**, such as provider name, technology, and
+        type.
+
+        Args:
+            platform_id (str): Unique ID of the platform.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Platform
+        """
+
         if not platform_id:
             raise Exception("get_platform: platform_id cannot be None")
 
@@ -128,44 +128,37 @@ class QaaSClient:
 
         return response.parsed
 
-    """List all available platforms
-
-     Retrieve information about all platforms.
-
-    Args:
-        name (Union[Unset, str]): List platforms with this name.
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        List[ScalewayQaasV1Alpha1ListPlatforms]
-    """
-
     def list_platforms(
-        self, name: Optional[str] = None
+        self,
+        name: Optional[str] = None,
+        backend_name: Optional[str] = None,
+        provider_name: Optional[str] = None,
     ) -> List[ScalewayQaasV1Alpha1Platform]:
-        response = _list_platforms_sync(client=self.__client, name=name)
+        """List all available platforms
+
+        Retrieve information about all platforms.
+
+        Args:
+            name (Union[Unset, str]): List platforms with this name.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            List[ScalewayQaasV1Alpha1ListPlatforms]
+        """
+
+        response = _list_platforms_sync(
+            client=self.__client,
+            name=name,
+            provider_name=provider_name,
+            backend_name=backend_name,
+        )
 
         _raise_on_error(response)
 
         return response.parsed.platforms
-
-    """Create a session
-
-     Create a dedicated session for the specified platform.
-
-    Args:
-        body (CreateSessionBody):
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        ScalewayQaasV1Alpha1Session
-    """
 
     def create_session(
         self,
@@ -175,6 +168,21 @@ class QaaSClient:
         deduplication_id: Optional[str] = None,
         name: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
+        """Create a session
+
+        Create a dedicated session for the specified platform.
+
+        Args:
+            body (CreateSessionBody):
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Session
+        """
+
         if not platform_id:
             raise Exception("create_session: platform_id cannot be None")
 
@@ -202,23 +210,23 @@ class QaaSClient:
 
         return response.parsed
 
-    """Get session information
-
-     Retrieve information about the provided **session ID**, such as name, status, and number of executed
-    jobs.
-
-    Args:
-        session_id (str): Unique ID of the session.
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        ScalewayQaasV1Alpha1Session
-    """
-
     def get_session(self, session_id: str) -> ScalewayQaasV1Alpha1Session:
+        """Get session information
+
+        Retrieve information about the provided **session ID**, such as name, status, and number of executed
+        jobs.
+
+        Args:
+            session_id (str): Unique ID of the session.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Session
+        """
+
         if not session_id:
             raise Exception("get_session: session_id cannot be None")
 
@@ -228,31 +236,31 @@ class QaaSClient:
 
         return response.parsed
 
-    """List all sessions
-
-     Retrieve information about all sessions.
-
-    Args:
-        platform_id (Union[Unset, str]): List sessions that have been created for this platform.
-        tags (Union[Unset, list[str]]): List sessions with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of sessions to return per page.
-        order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
-            Default: ListSessionsOrderBy.NAME_ASC.
-        project_id (str): List sessions belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        List[ScalewayQaasV1Alpha1ListSessionsResponse]
-    """
-
     def list_sessions(
         self, platform_id: Optional[str] = None
     ) -> List[ScalewayQaasV1Alpha1Session]:
+        """List all sessions
+
+        Retrieve information about all sessions.
+
+        Args:
+            platform_id (Union[Unset, str]): List sessions that have been created for this platform.
+            tags (Union[Unset, list[str]]): List sessions with these tags.
+            page (Union[Unset, int]): Page number.
+            page_size (Union[Unset, int]): Maximum number of sessions to return per page.
+            order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
+                Default: ListSessionsOrderBy.NAME_ASC.
+            project_id (str): List sessions belonging to this project ID. (UUID format) Example:
+                6170692e-7363-616c-6577-61792e636f6d.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            List[ScalewayQaasV1Alpha1ListSessionsResponse]
+        """
+
         if not platform_id:
             raise Exception("list_session: platform_id cannot be None")
 
@@ -264,23 +272,23 @@ class QaaSClient:
 
         return response.parsed.sessions
 
-    """Terminate an existing session
-
-     Terminate a session by its unique ID and cancel all its attached jobs and booking.
-
-    Args:
-        session_id (str): Unique ID of the session.
-        body (TerminateSessionBody):
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        ScalewayQaasV1Alpha1Session
-    """
-
     def terminate_session(self, session_id: str) -> ScalewayQaasV1Alpha1Session:
+        """Terminate an existing session
+
+        Terminate a session by its unique ID and cancel all its attached jobs and booking.
+
+        Args:
+            session_id (str): Unique ID of the session.
+            body (TerminateSessionBody):
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Session
+        """
+
         if not session_id:
             raise Exception("terminate_session: session_id cannot be None")
 
@@ -294,38 +302,23 @@ class QaaSClient:
 
         return response.parsed
 
-    """Delete an existing session
-
-     Delete a session by its unique ID and delete all its attached job and booking.
-
-    Args:
-        session_id (str): Unique ID of the session.
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-    """
-
     def delete_session(self, session_id: str):
+        """Delete an existing session
+
+        Delete a session by its unique ID and delete all its attached job and booking.
+
+        Args:
+            session_id (str): Unique ID of the session.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+        """
+
         if not session_id:
             raise Exception("delete_session: session_id cannot be None")
 
         _delete_session_sync(client=self.__client, session_id=session_id)
-
-    """Create a job
-
-     Create a job to be executed inside a session.
-
-    Args:
-        body (CreateJobBody):
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        ScalewayQaasV1Alpha1Job
-    """
 
     def create_job(
         self,
@@ -333,6 +326,21 @@ class QaaSClient:
         payload: Union[Dict, List, str],
         name: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Job:
+        """Create a job
+
+        Create a job to be executed inside a session.
+
+        Args:
+            body (CreateJobBody):
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Job
+        """
+
         if not session_id:
             raise Exception("create_job: session_id cannot be None")
 
@@ -355,22 +363,22 @@ class QaaSClient:
 
         return response.parsed
 
-    """Get job information
-
-     Retrieve information about the provided **job ID**, such as status, payload, and result.
-
-    Args:
-        job_id (str): Unique ID of the job you want to get.
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        ScalewayQaasV1Alpha1Job
-    """
-
     def get_job(self, job_id: str) -> ScalewayQaasV1Alpha1Job:
+        """Get job information
+
+        Retrieve information about the provided **job ID**, such as status, payload, and result.
+
+        Args:
+            job_id (str): Unique ID of the job you want to get.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Job
+        """
+
         if not job_id:
             raise Exception("get_job: job_id cannot be None")
 
@@ -380,22 +388,22 @@ class QaaSClient:
 
         return response.parsed
 
-    """List all results of a job
-
-     Retrieve all intermediate and final results of a job.
-
-    Args:
-        job_id (str): ID of the job.
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        List[ScalewayQaasV1Alpha1ListJobResultsResponse]
-    """
-
     def list_job_results(self, job_id: str) -> List[ScalewayQaasV1Alpha1JobResult]:
+        """List all results of a job
+
+        Retrieve all intermediate and final results of a job.
+
+        Args:
+            job_id (str): ID of the job.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            List[ScalewayQaasV1Alpha1ListJobResultsResponse]
+        """
+
         if not job_id:
             raise Exception("list_job_results: job_id cannot be None")
 
@@ -405,23 +413,23 @@ class QaaSClient:
 
         return response.parsed.job_results
 
-    """Cancel a job
-
-     Cancel the job corresponding to the provided **job ID**.
-
-    Args:
-        job_id (str): Unique ID of the job.
-        body (CancelJobBody):
-
-    Raises:
-        errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
-        httpx.TimeoutException: If the request takes longer than Client.timeout.
-
-    Returns:
-        ScalewayQaasV1Alpha1Job
-    """
-
     def cancel_job(self, job_id: str) -> ScalewayQaasV1Alpha1Job:
+        """Cancel a job
+
+        Cancel the job corresponding to the provided **job ID**.
+
+        Args:
+            job_id (str): Unique ID of the job.
+            body (CancelJobBody):
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Job
+        """
+
         if not job_id:
             raise Exception("cancel_job: job_id cannot be None")
 
