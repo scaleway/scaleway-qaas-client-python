@@ -1,4 +1,4 @@
-# Scaleway Python client for Quantum as a Service
+# Python client for Scaleway's Quantum as a Service
 
 This Python package is basically a HTTPX client based on Pydantic over the [Quantum as a Service API](https://www.scaleway.com/en/developers/api/qaas/).
 
@@ -6,7 +6,7 @@ This package is intented to be used from quantum circuit SDK such as Qiskit, Cir
 
 ## Installation
 
-We encourage installing Scaleway provider via the pip tool (a Python package manager):
+We encourage installing this package via the pip tool (a Python package manager):
 
 ```bash
 pip install scaleway-qaas-client
@@ -14,15 +14,14 @@ pip install scaleway-qaas-client
 
 ## Getting started
 
-To use QaaS client, you need to have an access secret_key and a Scaleway's project_id
-
+To use the client, you need to have an access secret_key and a Scaleway's project_id
 
 ```python
 from scaleway_qaas_client import QaaSClient
 
 client = QaaSClient(
-    project_id=os.environ["SCALEWAY_PROJECT_ID"],
-    secret_key=os.environ["SCALEWAY_API_TOKEN"],
+    project_id=os.environ["SCALEWAY_PROJECT_ID"], # Your project ID in UUID format
+    secret_key=os.environ["SCALEWAY_SECRET_KEY"], # Your personal secret key in UUID format
 )
 
 platforms = client.list_platforms(name="aer_simulation_pop_c16m128")

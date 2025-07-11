@@ -11,10 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List
 
+from dataclasses import dataclass
 from dataclasses_json import dataclass_json
 
 
@@ -23,6 +23,7 @@ class QaaSCircuitSerializationFormat(Enum):
     QASM_V1 = 1
     QASM_V2 = 2
     QASM_V3 = 3
+    JSON = 4
 
 
 @dataclass_json
