@@ -22,7 +22,7 @@ requirements = [r.strip() for r in requirements]
 
 setup(
     name="scaleway_qaas_client",
-    version="0.1.11",
+    version="0.1.12",
     project_urls={
         "Documentation": "https://www.scaleway.com/en/quantum-as-a-service/",
         "Source": "https://github.com/scaleway/scaleway-qaas-client-pythom",
@@ -32,7 +32,7 @@ setup(
     author_email="vmacheret@scaleway.com",
     packages=find_packages(),
     install_requires=requirements,
-    python_requires=(">=3.10.0"),
+    python_requires=(">=3.12.0"),
     license="Apache 2",
     description=description,
     long_description=long_description,
