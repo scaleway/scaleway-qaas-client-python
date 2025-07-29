@@ -77,7 +77,7 @@ def test_create_delete_session():
     client.delete_session(session.id)
 
 
-def test_list_platforms_by_backend(self):
+def test_list_platforms_by_backend():
     client = _get_client()
 
     platforms = client.list_platforms(backend_name="aer")
