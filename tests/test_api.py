@@ -19,6 +19,7 @@ from scaleway_qaas_client import QaaSClient
 
 _RANDOM_UUID = str(uuid.uuid4())
 _TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")
+_TEST_APPLICATION_NAME = os.environ.get("TEST_APPLICATION_NAME", "H2 VQE")
 
 
 def _get_client() -> QaaSClient:
@@ -38,43 +39,6 @@ def test_list_platform():
 
     assert platforms is not None
     assert len(platforms) > 0
-
-
-def test_create_delete_session():
-    client = _get_client()
-
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
-
-    assert platforms is not None
-    assert len(platforms) == 1
-
-    target_platform = platforms[0]
-
-    assert target_platform.id is not None
-
-    session = client.create_session(
-        platform_id=target_platform.id, max_duration="2m", max_idle_duration="2m"
-    )
-
-    assert session is not None
-    assert session.id is not None
-    assert session.platform_id == target_platform.id
-
-    while session.status == "starting":
-        session = client.get_session(session.id)
-        time.sleep(3)
-
-    assert session.status == "running"
-
-    session = client.terminate_session(session.id)
-
-    while session.status == "stopping":
-        session = client.get_session(session.id)
-        time.sleep(3)
-
-    assert session.status == "stopped"
-
-    client.delete_session(session.id)
 
 
 def test_list_platforms_by_backend():
@@ -102,7 +66,7 @@ def test_list_platforms_by_provider():
 def test_list_platforms_by_unexisting_provider():
     client = _get_client()
 
-    platforms = client.list_platforms(provider_name="aksjdkhjqw")
+    platforms = client.list_platforms(provider_name=_RANDOM_UUID)
 
     assert platforms == []
 
@@ -110,7 +74,7 @@ def test_list_platforms_by_unexisting_provider():
 def test_list_platforms_by_unexisting_backend():
     client = _get_client()
 
-    platforms = client.list_platforms(backend_name="129837yiuhjdwksad")
+    platforms = client.list_platforms(backend_name=_RANDOM_UUID)
 
     assert platforms == []
 
@@ -129,297 +93,183 @@ def test_list_platforms_by_name():
 def test_list_platforms_by_unexisting_name():
     client = _get_client()
 
-    platforms = client.list_platforms(name="w3219380ijskd")
+    platforms = client.list_platforms(name=_RANDOM_UUID)
 
     assert platforms == []
 
 
-# def test_list_platforms_by_type(self):
-#     type = PlatformType.SIMULATOR
-#     platforms = self._client.list_platforms(type=type)
+def test_list_sessions_unexisting_platform():
+    client = _get_client()
 
-#     for platform in platforms:
-#         assert platform.type == type
-#     assert len(platforms) > 0
+    sessions = client.list_sessions(platform_id=_RANDOM_UUID)
 
-# def test_list_platforms_by_qpu_type(self):
-#     plttype = PlatformType.QPU
-#     platforms = self._client.list_platforms(type=plttype)
+    assert sessions == []
 
-#     for platform in platforms:
-#         assert platform.type == plttype
 
-# def test_list_platforms_by_technology(self):
-#     technology = PlatformTechnology.PHOTONIC
-#     platforms = self._client.list_platforms(technology=technology)
+def test_create_delete_session():
+    client = _get_client()
 
-#     for platform in platforms:
-#         assert platform.technology == technology
-#     assert len(platforms) > 0
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-# #
-# # Applications tests
-# #
-# def test_list_applications(self):
-#     applications = self._client.list_applications()
+        assert platforms is not None
+        assert len(platforms) == 1
 
-#     assert len(applications) > 0
+        target_platform = platforms[0]
 
-# def test_list_applications_by_name(self):
-#     name = self._APPLICATION_NAME
-#     applications = self._client.list_applications(name=name)
+        assert target_platform.id is not None
 
-#     for application in applications:
-#         assert application.name == name
-#     assert len(applications) > 0
+        max_duration = "2m"
+        max_idle_duration = "2m"
 
-# def test_get_application(self):
-#     application = self._client.get_application(self._APPLICATION_ID)
+        session = client.create_session(
+            platform_id=target_platform.id,
+            max_duration=max_duration,
+            max_idle_duration=max_idle_duration,
+        )
 
-#     assert self._PLATFORM_ID in application.compatible_platform_ids
-#     assert application.id == self._APPLICATION_ID
-#     assert application.name == self._APPLICATION_NAME
+        assert session is not None
+        assert session.id is not None
+        assert session.platform_id == target_platform.id
 
-# def test_get_unexisting_application(self):
-#     application = self._client.get_application(self._RANDOM_UUID)
+        while session.status == "starting":
+            session = client.get_session(session.id)
+            time.sleep(3)
 
-#     assert application == None
+        assert session.status == "running"
 
-# def test_list_applications_by_unexisting_name(self):
-#     application = self._client.list_applications(name=random_name())
+        session_acls = client.list_session_acls(session.id)
+        assert len(session_acls) > 0
 
-#     assert application == []
+        session = client.terminate_session(session.id)
 
-# def test_list_applications_by_type(self):
-#     type = ApplicationType.VQE
-#     applications = self._client.list_applications(type=type)
+        while session.status == "stopping":
+            session = client.get_session(session.id)
+            time.sleep(3)
 
-#     for application in applications:
-#         assert application.type == type
-#     assert len(applications) > 0
+        assert session.status == "stopped"
+    finally:
+        client.delete_session(session.id)
 
-# def test_get_platform(self):
-#     platform = self._client.get_platform(self._PLATFORM_ID)
 
-#     assert platform.id == self._PLATFORM_ID
+def test_create_session_same_deduplication_id():
+    client = _get_client()
 
-# def test_get_unexisting_platform(self):
-#     platform = self._client.get_platform(self._RANDOM_UUID)
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-#     assert platform == None
+        assert len(platforms) > 0
 
+        platform = platforms[0]
 
-# #
-# # Session tests
-# #
-# def test_list_session_acl(self):
-#     session_acls = self._client.list_session_acls(self._SESSION_ID)
-
-#     assert session_acls == [SessionAcl.FULL.name.lower()]
-
-# def test_create_session_with_unexisting_platform(self):
-#     session = self._client.create_session(self._PROJECT_ID, self._RANDOM_UUID)
-
-#     assert session == None
-
-# def test_get_unexisting_session(self):
-#     session = self._client.get_session(self._RANDOM_UUID)
-
-#     assert session == None
-
-# def test_delete_unexisting_session(self):
-#     self._client.delete_session(self._RANDOM_UUID)
-
-# def test_list_sessions_by_project_without_premission(self):
-#     sessions = self._client.list_sessions(self._RANDOM_UUID)
-
-#     assert sessions == []
-
-# def test_list_sessions_unexisting_platform(self):
-#     sessions = self._client.list_sessions(
-#         self._PROJECT_ID, platform_id=self._RANDOM_UUID
-#     )
-
-#     assert sessions == []
-
-# def test_get_session(self):
-#     session = self._client.get_session(self._SESSION_ID)
-
-#     assert session != None
-#     assert session.id == self._SESSION_ID
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.name == self._SESSION_NAME
-#     assert session.max_duration == self._SESSION_MAX_DURATION
-#     assert session.max_idle_duration == self._SESSION_MAX_IDLE_DURATION
-#     assert session.status in [SessionStatus.STARTING, SessionStatus.RUNNING]
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     assert session.tags == self._SESSION_TAGS
-
-# def test_list_sessions_by_project(self):
-#     process = self._client.create_process(
-#         self._PROJECT_ID,
-#         self._PLATFORM_ID,
-#         self._APPLICATION_ID,
-#         self._PROCESS_NAME,
-#     )
-
-#     # Wait that the process create some sessions
-#     sessions = None
-#     while sessions is None or len(sessions) == 0:
-#         sessions = self._client.list_sessions(self._PROJECT_ID)
-#         time.sleep(2)
-
-#     assert sessions != None
-#     assert len(sessions) > 0
-
-#     session_found = None
-#     session_from_process_found = False
-#     for session in sessions:
-#         if session.id == self._SESSION_ID:
-#             session_found = session
-#         if session.origin_id == process.id:
-#             session_from_process_found = True
-
-#     assert session_from_process_found == False
-#     assert session_found is not None
-#     assert session_found.project_id == self._PROJECT_ID
-#     assert session_found.platform_id == self._PLATFORM_ID
-#     assert session_found.name == self._SESSION_NAME
-#     assert session_found.max_duration == self._SESSION_MAX_DURATION
-#     assert session_found.max_idle_duration == self._SESSION_MAX_IDLE_DURATION
-#     assert session_found.status in [SessionStatus.STARTING, SessionStatus.RUNNING]
-#     assert session_found.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     assert session_found.tags == self._SESSION_TAGS
-
-# def test_list_sessions_by_platform(self):
-#     sessions = self._client.list_sessions(
-#         self._PROJECT_ID, platform_id=self._PLATFORM_ID
-#     )
-
-#     assert sessions != None
-#     assert len(sessions) > 0
-
-#     session_found = False
-#     for session in sessions:
-#         if session.id == self._SESSION_ID:
-#             session_found = True
-#             break
-
-#     assert session_found == True
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.name == self._SESSION_NAME
-#     assert session.max_duration == self._SESSION_MAX_DURATION
-#     assert session.max_idle_duration == self._SESSION_MAX_IDLE_DURATION
-#     assert session.status in [SessionStatus.STARTING, SessionStatus.RUNNING]
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     assert session.tags == self._SESSION_TAGS
-
-# def test_create_session_same_deduplication_id(self):
-#     session = self._client.create_session(
-#         project_id=self._PROJECT_ID,
-#         platform_id=self._PLATFORM_ID,
-#         deduplication_id=self._SESSION_DEDUPLICATION_ID,
-#     )
-
-#     assert session != None
-#     assert session.id == self._SESSION_ID
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.name == self._SESSION_NAME
-#     assert session.max_duration == self._SESSION_MAX_DURATION
-#     assert session.max_idle_duration == self._SESSION_MAX_IDLE_DURATION
-#     assert session.status in [SessionStatus.STARTING, SessionStatus.RUNNING]
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     # assert session.tags == self._SESSION_TAGS
-
-# def test_update_session(self):
-#     self._SESSION_NAME = "poney"
-#     self._SESSION_MAX_DURATION = "555s"
-#     self._SESSION_MAX_IDLE_DURATION = "555s"
-#     session = self._client.update_session(
-#         self._SESSION_ID,
-#         name=self._SESSION_NAME,
-#         max_duration=self._SESSION_MAX_DURATION,
-#         max_idle_duration=self._SESSION_MAX_IDLE_DURATION,
-#     )
-
-#     assert session != None
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.name == self._SESSION_NAME
-#     assert session.max_duration == self._SESSION_MAX_DURATION
-#     assert session.max_idle_duration == self._SESSION_MAX_IDLE_DURATION
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-
-#     session = self._client.get_session(self._SESSION_ID)
-
-#     assert session != None
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.name == self._SESSION_NAME
-#     assert session.max_duration == self._SESSION_MAX_DURATION
-#     assert session.max_idle_duration == self._SESSION_MAX_IDLE_DURATION
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-
-# def test_update_session_tags(self):
-#     tags = ["updated", "other"]
-#     session = self._client.update_session(self._SESSION_ID, tags=tags)
-
-#     assert session != None
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     assert session.tags == tags
-
-#     session = self._client.get_session(self._SESSION_ID)
-
-#     assert session != None
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     assert session.tags == tags
-
-# def test_remove_session_tags(self):
-#     tags = []
-#     session = self._client.update_session(self._SESSION_ID, tags=tags)
-
-#     assert session != None
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     assert session.tags == tags
-
-#     session = self._client.get_session(self._SESSION_ID)
-
-#     assert session != None
-#     assert session.project_id == self._PROJECT_ID
-#     assert session.platform_id == self._PLATFORM_ID
-#     assert session.deduplication_id == self._SESSION_DEDUPLICATION_ID
-#     assert session.tags == tags
-
-# #
-# # Job tests
-# #
-# def test_create_job_with_unexisting_session(self):
-#     name = random_name()
-#     circuit = {"perceval_circuit": self._PERCEVAL_CIRCUIT}
-#     job = self._client.create_job(name, self._RANDOM_UUID, circuit)
-
-#     assert job == None
-
-# def test_get_unexisting_job(self):
-#     job = self._client.get_job(self._RANDOM_UUID)
-
-#     assert job == None
-
-# def test_update_unexisting_job(self):
-#     job = self._client.update_job(self._RANDOM_UUID, name="toto")
-
-#     assert job == None
-
-# def test_cancel_unexisting_job(self):
-#     job = self._client.cancel_job(self._RANDOM_UUID)
-
-#     assert job == None
+        max_duration = "2m"
+        max_idle_duration = "2m"
+        deduplication_id = f"hihaaa-{_RANDOM_UUID}"
+
+        session = client.create_session(
+            platform_id=platform.id,
+            max_duration=max_duration,
+            max_idle_duration=max_idle_duration,
+            deduplication_id=deduplication_id,
+        )
+
+        assert session is not None
+        assert session.id is not None
+        assert session.platform_id == platform.id
+        assert session.deduplication_id == deduplication_id
+        assert session.status in ["starting", "running"]
+
+        second_session = client.create_session(
+            platform_id=platform.id,
+            deduplication_id=deduplication_id,
+        )
+
+        assert second_session != None
+        assert second_session.id == session.id
+        assert second_session.project_id == session.project_id
+        assert second_session.platform_id == session.platform_id
+        assert second_session.name == session.name
+        assert second_session.max_duration == session.max_duration
+        assert second_session.max_idle_duration == session.max_idle_duration
+        assert second_session.status in session.status
+        assert second_session.deduplication_id == session.deduplication_id
+    finally:
+        client.delete_session(session.id)
+
+
+def test_list_applications():
+    client = _get_client()
+
+    applications = client.list_applications()
+
+    assert len(applications) > 0
+
+
+def test_list_applications_by_name():
+    client = _get_client()
+
+    applications = client.list_applications(name=_TEST_APPLICATION_NAME)
+
+    assert len(applications) > 0
+
+    for application in applications:
+        assert application.name == _TEST_APPLICATION_NAME
+
+
+def test_run_process():
+    client = _get_client()
+
+    process_inputs = {
+        "Custom VQE": '{ "max_iterations": 1, "hamiltonian_strings" : ["XIIX", "ZZYY", "ZXYY", "ZZZZ"], "hamiltonian_weights" : [ -0.5, 1, 2.44, 5 ] }',
+        "CVar VQE": '{ "max_iterations": 3, "qubo_matrix" : [ [ 31, -500 ], [ -500, 32 ] ] }',
+        "Chemistry VQE": '{"max_iterations": 1, "geometry": [ {"coordinates": [ 0, 0, 0 ], "element": "Li" }, { "coordinates": [ 0, 0, 0.7414 ], "element": "H" }]}',
+        "H2 VQE": '{"max_iterations": 2, "geometry": [ {"coordinates": [ 0, 0, 0 ], "element": "H" }, { "coordinates": [ 0, 0, 0.7414 ], "element": "H" }]}',
+        "Graph Isomorphism": '{ "graph_a" : [ [ 0, 1 ], [ 1, 2 ], [2, 3], [2, 4], [3, 4] ], "graph_b" : [ [ 0, 1 ], [ 1, 2 ], [2, 3], [2, 4], [3, 4] ], "epsilon" : 10, "error" : 0.1, "algo" : "Laplacian PP", "max_iterations" : 3, "nb_samples" : 1000, "nb_samples_min_accepted" : 10}',
+        "Graph DSI": '{ "graph" : [ [ 0, 1 ], [ 1, 2 ], [2, 3], [2, 4], [3, 4] ], "max_iterations" : 10, "nb_samples" : 10000, "size_subgraph" : 3, "seed" : [ 0 ], "nb_samples_min_accepted" : 1000}',
+    }
+
+    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+    assert len(platforms) > 0
+
+    platform = platforms[0]
+
+    if platform.provider_name != "quandela":
+        print("SKIP RUN PROCESS : ONLY QUANDELA PLATFORMS CAN RUN PROCESS")
+        return
+
+    assert _TEST_APPLICATION_NAME in process_inputs
+
+    applications = client.list_applications(name=_TEST_APPLICATION_NAME)
+
+    assert len(applications) > 0
+
+    application = applications[0]
+
+    process = client.create_process(
+        platform_id=platform.id,
+        application_id=application.id,
+        input=process_inputs[_TEST_APPLICATION_NAME],
+    )
+
+    assert process.platform_id == platform.id
+    assert process.application_id == application.id
+    assert process.status == "starting"
+
+    assert process.input_ == process_inputs[_TEST_APPLICATION_NAME]
+    assert process.progress_message == ""
+    assert process.tags == []
+
+    while True:
+        time.sleep(3)
+        process = client.get_process(process.id)
+        assert process.status in [
+            "starting",
+            "running",
+            "completed",
+        ]
+        print(process.progress, process.progress_message)
+        if process.status == "completed":
+            results = client.list_process_results(process.id)
+            assert len(results) > 0
+            break

@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import json
-from typing import Dict, List, Optional, Union
-
 import randomname
+
+from typing import Dict, List, Optional, Union
 from pytimeparse.timeparse import timeparse
 
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.cancel_job import (
@@ -27,7 +27,7 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.get_job impor
     sync_detailed as _get_job_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_results import (
-    sync_detailed as _list_job_result_sync,
+    sync_detailed as _list_job_results_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.get_platform import (
     sync_detailed as _get_platform_sync,
@@ -47,14 +47,43 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.get_sessi
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.list_sessions import (
     sync_detailed as _list_sessions_sync,
 )
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.default.list_session_ac_ls import (
+    sync_detailed as _list_session_acls_sync,
+)
 from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.terminate_session import (
     sync_detailed as _terminate_session_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.applications.get_application import (
+    sync_detailed as _get_application_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.applications.list_applications import (
+    sync_detailed as _list_applications_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.create_process import (
+    sync_detailed as _create_process_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.delete_process import (
+    sync_detailed as _delete_process_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.cancel_process import (
+    sync_detailed as _cancel_process_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.get_process import (
+    sync_detailed as _get_process_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.list_processes import (
+    sync_detailed as _list_processes_sync,
+)
+from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.list_process_results import (
+    sync_detailed as _list_process_results_sync,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.client import (
     AuthenticatedClient,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
     CancelJobBody,
+    CancelProcessBody,
+    CreateProcessBody,
     CreateJobBody,
     CreateJobBodyCircuit,
     CreateSessionBody,
@@ -62,6 +91,10 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1JobResult,
     ScalewayQaasV1Alpha1Platform,
     ScalewayQaasV1Alpha1Session,
+    ScalewayQaasV1Alpha1SessionAccess,
+    ScalewayQaasV1Alpha1Application,
+    ScalewayQaasV1Alpha1Process,
+    ScalewayQaasV1Alpha1ProcessResult,
     TerminateSessionBody,
 )
 from scaleway_qaas_client.quantum_as_a_service_api_client.types import Response
@@ -139,6 +172,8 @@ class QaaSClient:
         Retrieve information about all platforms.
 
         Args:
+            provider_name (Union[Unset, str]): List platforms with this provider name.
+            backend_name (Union[Unset, str]): List platforms with this backend name.
             name (Union[Unset, str]): List platforms with this name.
 
         Raises:
@@ -163,8 +198,8 @@ class QaaSClient:
     def create_session(
         self,
         platform_id: str,
-        max_duration: Union[str, int],
-        max_idle_duration: Union[str, int],
+        max_duration: Union[str, int] = "59m",
+        max_idle_duration: Union[str, int] = "59m",
         deduplication_id: Optional[str] = None,
         name: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
@@ -173,7 +208,12 @@ class QaaSClient:
         Create a dedicated session for the specified platform.
 
         Args:
-            body (CreateSessionBody):
+            platform_id (str): ID of the Platform for which the session was created.
+            name (Union[None, Unset, str]): Name of the session.
+            max_idle_duration (Union[None, Unset, str]): Maximum idle duration before the session ends. (in seconds)
+                Example: 2.5s.
+            max_duration (Union[None, Unset, str]): Maximum duration before the session ends. (in seconds) Example: 2.5s.
+            deduplication_id (Union[None, Unset, str]): Deduplication ID of the session.
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -245,13 +285,6 @@ class QaaSClient:
 
         Args:
             platform_id (Union[Unset, str]): List sessions that have been created for this platform.
-            tags (Union[Unset, list[str]]): List sessions with these tags.
-            page (Union[Unset, int]): Page number.
-            page_size (Union[Unset, int]): Maximum number of sessions to return per page.
-            order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
-                Default: ListSessionsOrderBy.NAME_ASC.
-            project_id (str): List sessions belonging to this project ID. (UUID format) Example:
-                6170692e-7363-616c-6577-61792e636f6d.
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -260,9 +293,6 @@ class QaaSClient:
         Returns:
             List[ScalewayQaasV1Alpha1ListSessionsResponse]
         """
-
-        if not platform_id:
-            raise Exception("list_session: platform_id cannot be None")
 
         response = _list_sessions_sync(
             client=self.__client, project_id=self.__project_id, platform_id=platform_id
@@ -279,7 +309,6 @@ class QaaSClient:
 
         Args:
             session_id (str): Unique ID of the session.
-            body (TerminateSessionBody):
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -320,6 +349,30 @@ class QaaSClient:
 
         _delete_session_sync(client=self.__client, session_id=session_id)
 
+    def list_session_acls(
+        self, session_id: Optional[str] = None
+    ) -> List[ScalewayQaasV1Alpha1SessionAccess]:
+        """List session ACLs
+
+        List the Access permission of the existing session.
+
+        Args:
+            session_id (str): Unique ID of the session.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+        """
+
+        if not session_id:
+            raise Exception("list_session_acls: session_id cannot be None")
+
+        response = _list_session_acls_sync(client=self.__client, session_id=session_id)
+
+        _raise_on_error(response)
+
+        return response.parsed.acls
+
     def create_job(
         self,
         session_id: str,
@@ -331,7 +384,9 @@ class QaaSClient:
         Create a job to be executed inside a session.
 
         Args:
-            body (CreateJobBody):
+            name (str): Name of the job.
+            session_id (str): Session in which the job is executed.
+            payload (str): Quantum circuit that should be executed.
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -407,7 +462,7 @@ class QaaSClient:
         if not job_id:
             raise Exception("list_job_results: job_id cannot be None")
 
-        response = _list_job_result_sync(client=self.__client, job_id=job_id)
+        response = _list_job_results_sync(client=self.__client, job_id=job_id)
 
         _raise_on_error(response)
 
@@ -420,7 +475,6 @@ class QaaSClient:
 
         Args:
             job_id (str): Unique ID of the job.
-            body (CancelJobBody):
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -442,3 +496,239 @@ class QaaSClient:
         _raise_on_error(response)
 
         return response.parsed
+
+    def get_application(self, application_id: str) -> ScalewayQaasV1Alpha1Application:
+        """Get application information
+
+        Retrieve information about the provided **applcation ID**, such as name, type and compatible
+        platforms.
+
+        Args:
+            application_id (str): Unique ID of the application.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1Application]
+        """
+        if not application_id:
+            raise Exception("get_platform: platform_id cannot be None")
+
+        response = _get_application_sync(
+            client=self.__client, application_id=application_id
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed
+
+    def list_applications(
+        self,
+        name: Optional[str] = None,
+    ) -> List[ScalewayQaasV1Alpha1Application]:
+        """List all available applications
+
+        Retrieve information about all applications.
+
+        Args:
+            name (Union[Unset, str]): List applications with this name.
+            application_type (Union[Unset, ListApplicationsApplicationType]): List applications with
+                this type. Default: ListApplicationsApplicationType.UNKNOWN_TYPE.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1ListApplicationsResponse]
+        """
+
+        response = _list_applications_sync(
+            client=self.__client,
+            name=name,
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed.applications
+
+    def create_process(
+        self,
+        application_id: str,
+        platform_id: str,
+        input: Union[List, Dict, str],
+        name: Optional[str] = None,
+    ) -> ScalewayQaasV1Alpha1Process:
+        """Create a process
+
+        Create a new process for the specified application on a specified platform.
+
+        Args:
+            platform_id (Union[None, str]): ID of the platform for which the process was created.
+            application_id (Union[None, str]): ID of the application for which the process was created.
+            name (Union[Unset, str]): Name of the process.
+            input_(Union[None, Unset, str]): Process parameters in JSON format.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1Process]
+        """
+
+        if not platform_id:
+            raise Exception("create_process: platform_id cannot be None")
+
+        if not application_id:
+            raise Exception("create_process: application_id cannot be None")
+
+        if not input:
+            raise Exception("create_process: input cannot be None")
+
+        name = name if name else f"qp-{randomname.get_name()}"
+
+        input = input if isinstance(input, str) else json.dumps(input)
+
+        response = _create_process_sync(
+            client=self.__client,
+            body=CreateProcessBody(
+                project_id=self.__project_id,
+                name=name,
+                platform_id=platform_id,
+                application_id=application_id,
+                input_=input,
+            ),
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed
+
+    def cancel_process(self, process_id: str) -> ScalewayQaasV1Alpha1Process:
+        """Cancel a running process
+
+        Cancel a process by its unique ID. Intermediate results are still available.
+
+        Args:
+            process_id (str): Unique ID of the process.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1Process]
+        """
+        if not process_id:
+            raise Exception("cancel_process: job_id cannot be None")
+
+        response = _cancel_process_sync(
+            client=self.__client,
+            process_id=process_id,
+            body=CancelProcessBody(),
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed
+
+    def delete_process(self, process_id: str):
+        """Delete an existing process
+
+        Delete a process by its unique ID and delete all its data.
+
+        Args:
+            process_id (str): Unique ID of the process.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+        """
+
+        if not process_id:
+            raise Exception("delete_process: process_id cannot be None")
+
+        _delete_process_sync(client=self.__client, process_id=process_id)
+
+    def get_process(self, process_id: str) -> ScalewayQaasV1Alpha1Session:
+        """Get process information
+
+        Retrieve information about the provided **process ID**, such as name, status and progress.
+
+        Args:
+            process_id (str): Unique ID of the process.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1Process]
+        """
+        if not process_id:
+            raise Exception("get_process: process_id cannot be None")
+
+        response = _get_process_sync(client=self.__client, process_id=process_id)
+
+        _raise_on_error(response)
+
+        return response.parsed
+
+    def list_processes(
+        self, application_id: Optional[str] = None
+    ) -> List[ScalewayQaasV1Alpha1Session]:
+        """List all processes
+
+        Retrieve information about all processes.
+
+        Args:
+            application_id (Union[Unset, str]): List processes that have been created for this
+                application.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1ListProcessesResponse]
+        """
+        response = _list_processes_sync(
+            client=self.__client,
+            project_id=self.__project_id,
+            application_id=application_id,
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed.processes
+
+    def list_process_results(
+        self, process_id: str
+    ) -> List[ScalewayQaasV1Alpha1ProcessResult]:
+        """List all results of a process
+
+        Retrieve all intermediate and final result of a process.
+
+        Args:
+            process_id (str): ID of the process.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1ListProcessResultsResponse]
+        """
+        if not process_id:
+            raise Exception("list_process_results: process_id cannot be None")
+
+        response = _list_process_results_sync(
+            client=self.__client, process_id=process_id
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed.process_results
