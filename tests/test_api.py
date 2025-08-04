@@ -15,7 +15,7 @@ import os
 import time
 import uuid
 
-from scaleway_qaas_client import QaaSClient
+from scaleway_qaas_client.v1alpha1 import QaaSClient
 
 _RANDOM_UUID = str(uuid.uuid4())
 _TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")

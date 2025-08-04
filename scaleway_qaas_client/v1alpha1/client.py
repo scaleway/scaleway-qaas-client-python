@@ -121,7 +121,7 @@ class QaaSClient:
             raise Exception("QaasClient: secret_key cannot be None")
 
         self.__project_id = project_id
-        url = url if url else _DEFAULT_URL
+        url = url or _DEFAULT_URL
 
         self.__client = AuthenticatedClient(
             base_url=url,
@@ -226,7 +226,7 @@ class QaaSClient:
         if not platform_id:
             raise Exception("create_session: platform_id cannot be None")
 
-        name = name if name else f"qs-{randomname.get_name()}"
+        name = name or f"qs-{randomname.get_name()}"
 
         if isinstance(max_duration, str):
             max_duration = f"{timeparse(max_duration)}s"
@@ -403,7 +403,7 @@ class QaaSClient:
             raise Exception("create_job: payload cannot be None")
 
         payload = payload if isinstance(payload, str) else json.dumps(payload)
-        name = name if name else f"qj-{randomname.get_name()}"
+        name = name or f"qj-{randomname.get_name()}"
 
         response = _create_job_sync(
             client=self.__client,
@@ -588,7 +588,7 @@ class QaaSClient:
         if not input:
             raise Exception("create_process: input cannot be None")
 
-        name = name if name else f"qp-{randomname.get_name()}"
+        name = name or f"qp-{randomname.get_name()}"
 
         input = input if isinstance(input, str) else json.dumps(input)
 
