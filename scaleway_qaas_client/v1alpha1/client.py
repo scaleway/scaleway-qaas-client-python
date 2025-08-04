@@ -17,70 +17,70 @@ import randomname
 from typing import Dict, List, Optional, Union
 from pytimeparse.timeparse import timeparse
 
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.cancel_job import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.jobs.cancel_job import (
     sync_detailed as _cancel_job_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.create_job import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.jobs.create_job import (
     sync_detailed as _create_job_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.get_job import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.jobs.get_job import (
     sync_detailed as _get_job_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.jobs.list_job_results import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.jobs.list_job_results import (
     sync_detailed as _list_job_results_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.get_platform import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.platforms.get_platform import (
     sync_detailed as _get_platform_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.platforms.list_platforms import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.platforms.list_platforms import (
     sync_detailed as _list_platforms_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.create_session import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.sessions.create_session import (
     sync_detailed as _create_session_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.delete_session import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.sessions.delete_session import (
     sync_detailed as _delete_session_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.get_session import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.sessions.get_session import (
     sync_detailed as _get_session_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.list_sessions import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.sessions.list_sessions import (
     sync_detailed as _list_sessions_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.default.list_session_ac_ls import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.default.list_session_ac_ls import (
     sync_detailed as _list_session_acls_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.sessions.terminate_session import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.sessions.terminate_session import (
     sync_detailed as _terminate_session_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.applications.get_application import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.applications.get_application import (
     sync_detailed as _get_application_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.applications.list_applications import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.applications.list_applications import (
     sync_detailed as _list_applications_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.create_process import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes.create_process import (
     sync_detailed as _create_process_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.delete_process import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes.delete_process import (
     sync_detailed as _delete_process_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.cancel_process import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes.cancel_process import (
     sync_detailed as _cancel_process_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.get_process import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes.get_process import (
     sync_detailed as _get_process_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.list_processes import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes.list_processes import (
     sync_detailed as _list_processes_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.api.processes.list_process_results import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes.list_process_results import (
     sync_detailed as _list_process_results_sync,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.client import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.client import (
     AuthenticatedClient,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.models import (
     CancelJobBody,
     CancelProcessBody,
     CreateProcessBody,
@@ -97,7 +97,7 @@ from scaleway_qaas_client.quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1ProcessResult,
     TerminateSessionBody,
 )
-from scaleway_qaas_client.quantum_as_a_service_api_client.types import Response
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.types import Response
 
 _DEFAULT_URL = "https://api.scaleway.com"
 
