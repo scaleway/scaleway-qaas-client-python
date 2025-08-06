@@ -29,6 +29,9 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.jobs.get_
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.jobs.list_job_results import (
     sync_detailed as _list_job_results_sync,
 )
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.jobs.list_jobs import (
+    sync_detailed as _list_jobs_sync,
+)
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.platforms.get_platform import (
     sync_detailed as _get_platform_sync,
 )
@@ -442,6 +445,27 @@ class QaaSClient:
         _raise_on_error(response)
 
         return response.parsed
+
+    def list_jobs(self, session_id: str) -> List[ScalewayQaasV1Alpha1Job]:
+        """List all jobs within a project or session
+
+        Retrieve information about all jobs within a given session.
+
+        Args:
+            session_id (str): Unique ID of the session you want to get jobs from.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1ListJobsResponse]
+        """
+        response = _list_jobs_sync(client=self.__client, session_id=session_id)
+
+        _raise_on_error(response)
+
+        return response.parsed.jobs
 
     def list_job_results(self, job_id: str) -> List[ScalewayQaasV1Alpha1JobResult]:
         """List all results of a job

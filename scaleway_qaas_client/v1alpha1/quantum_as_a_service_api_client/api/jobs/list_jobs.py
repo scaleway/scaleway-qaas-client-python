@@ -13,6 +13,7 @@ from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
+    session_id: str,
     *,
     tags: Union[Unset, list[str]] = UNSET,
     page: Union[Unset, int] = UNSET,
@@ -30,6 +31,8 @@ def _get_kwargs(
     params["page"] = page
 
     params["page_size"] = page_size
+
+    params["session_id"] = session_id
 
     json_order_by: Union[Unset, str] = UNSET
     if not isinstance(order_by, Unset):
@@ -73,6 +76,7 @@ def _build_response(
 
 
 def sync_detailed(
+    session_id: str,
     *,
     client: AuthenticatedClient,
     tags: Union[Unset, list[str]] = UNSET,
@@ -100,6 +104,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
+        session_id=session_id,
         tags=tags,
         page=page,
         page_size=page_size,
@@ -114,6 +119,7 @@ def sync_detailed(
 
 
 def sync(
+    session_id: str,
     *,
     client: AuthenticatedClient,
     tags: Union[Unset, list[str]] = UNSET,
@@ -141,6 +147,7 @@ def sync(
     """
 
     return sync_detailed(
+        session_id=session_id,
         client=client,
         tags=tags,
         page=page,
@@ -150,6 +157,7 @@ def sync(
 
 
 async def asyncio_detailed(
+    session_id: str,
     *,
     client: AuthenticatedClient,
     tags: Union[Unset, list[str]] = UNSET,
@@ -177,6 +185,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
+        session_id=session_id,
         tags=tags,
         page=page,
         page_size=page_size,
@@ -189,6 +198,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
+    session_id: str,
     *,
     client: AuthenticatedClient,
     tags: Union[Unset, list[str]] = UNSET,
@@ -217,6 +227,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
+            session_id=session_id,
             client=client,
             tags=tags,
             page=page,
