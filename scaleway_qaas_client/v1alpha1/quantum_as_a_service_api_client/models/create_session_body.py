@@ -30,6 +30,7 @@ class CreateSessionBody:
         deduplication_id (Union[None, Unset, str]): Deduplication ID of the session.
         booking_demand (Union[Unset, CreateSessionBodyBookingDemand]): A booking demand to schedule the session, only
             applicable if the platform is bookable.
+        model_id (Union[None, Unset, str]): Default computation model ID to be executed by job assigned to this session.
     """
 
     project_id: str
@@ -40,6 +41,7 @@ class CreateSessionBody:
     tags: Union[None, Unset, list[str]] = UNSET
     deduplication_id: Union[None, Unset, str] = UNSET
     booking_demand: Union[Unset, "CreateSessionBodyBookingDemand"] = UNSET
+    model_id: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -84,6 +86,12 @@ class CreateSessionBody:
         if not isinstance(self.booking_demand, Unset):
             booking_demand = self.booking_demand.to_dict()
 
+        model_id: Union[None, Unset, str]
+        if isinstance(self.model_id, Unset):
+            model_id = UNSET
+        else:
+            model_id = self.model_id
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -104,6 +112,8 @@ class CreateSessionBody:
             field_dict["deduplication_id"] = deduplication_id
         if booking_demand is not UNSET:
             field_dict["booking_demand"] = booking_demand
+        if model_id is not UNSET:
+            field_dict["model_id"] = model_id
 
         return field_dict
 
@@ -178,6 +188,15 @@ class CreateSessionBody:
         else:
             booking_demand = CreateSessionBodyBookingDemand.from_dict(_booking_demand)
 
+        def _parse_model_id(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        model_id = _parse_model_id(d.pop("model_id", UNSET))
+
         create_session_body = cls(
             project_id=project_id,
             platform_id=platform_id,
@@ -187,6 +206,7 @@ class CreateSessionBody:
             tags=tags,
             deduplication_id=deduplication_id,
             booking_demand=booking_demand,
+            model_id=model_id,
         )
 
         create_session_body.additional_properties = d

@@ -22,6 +22,8 @@ class CreateJobBody:
         circuit (CreateJobBodyCircuit): Quantum circuit that should be executed.
         tags (Union[None, Unset, list[str]]): Tags of the job.
         max_duration (Union[None, Unset, str]): Maximum duration of the job. (in seconds) Example: 2.5s.
+        model_id (Union[None, Unset, str]): Computation model ID to be executed by the job.
+        parameters (Union[None, Unset, str]): Execution parameters for this job.
     """
 
     name: str
@@ -29,6 +31,8 @@ class CreateJobBody:
     circuit: "CreateJobBodyCircuit"
     tags: Union[None, Unset, list[str]] = UNSET
     max_duration: Union[None, Unset, str] = UNSET
+    model_id: Union[None, Unset, str] = UNSET
+    parameters: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -53,6 +57,18 @@ class CreateJobBody:
         else:
             max_duration = self.max_duration
 
+        model_id: Union[None, Unset, str]
+        if isinstance(self.model_id, Unset):
+            model_id = UNSET
+        else:
+            model_id = self.model_id
+
+        parameters: Union[None, Unset, str]
+        if isinstance(self.parameters, Unset):
+            parameters = UNSET
+        else:
+            parameters = self.parameters
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -66,6 +82,10 @@ class CreateJobBody:
             field_dict["tags"] = tags
         if max_duration is not UNSET:
             field_dict["max_duration"] = max_duration
+        if model_id is not UNSET:
+            field_dict["model_id"] = model_id
+        if parameters is not UNSET:
+            field_dict["parameters"] = parameters
 
         return field_dict
 
@@ -106,12 +126,32 @@ class CreateJobBody:
 
         max_duration = _parse_max_duration(d.pop("max_duration", UNSET))
 
+        def _parse_model_id(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        model_id = _parse_model_id(d.pop("model_id", UNSET))
+
+        def _parse_parameters(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        parameters = _parse_parameters(d.pop("parameters", UNSET))
+
         create_job_body = cls(
             name=name,
             session_id=session_id,
             circuit=circuit,
             tags=tags,
             max_duration=max_duration,
+            model_id=model_id,
+            parameters=parameters,
         )
 
         create_job_body.additional_properties = d

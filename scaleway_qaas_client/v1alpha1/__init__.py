@@ -60,3 +60,6 @@ from .quantum_as_a_service_api_client.models import (
 from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1SessionAccess as QaaSSessionAccess,
 )
+from .quantum_as_a_service_api_client.models import (
+    ScalewayQaasV1Alpha1Model as QaaSModel,
+)

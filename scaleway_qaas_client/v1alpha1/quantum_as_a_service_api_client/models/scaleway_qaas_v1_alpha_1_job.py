@@ -31,6 +31,8 @@ class ScalewayQaasV1Alpha1Job:
         progress_message (Union[None, Unset, str]): Last progress message, if the job has started.
         job_duration (Union[None, Unset, str]): Duration of the job, if the job is finished. (in seconds) Example: 2.5s.
         result_distribution (Union[None, Unset, str]): Result of the job, if the job is finished.
+        model_id (Union[None, Unset, str]): Computation model ID executed by the job.
+        parameters (Union[None, Unset, str]): Execution parameters for this job.
     """
 
     id: Union[Unset, str] = UNSET
@@ -46,6 +48,8 @@ class ScalewayQaasV1Alpha1Job:
     progress_message: Union[None, Unset, str] = UNSET
     job_duration: Union[None, Unset, str] = UNSET
     result_distribution: Union[None, Unset, str] = UNSET
+    model_id: Union[None, Unset, str] = UNSET
+    parameters: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -110,6 +114,18 @@ class ScalewayQaasV1Alpha1Job:
         else:
             result_distribution = self.result_distribution
 
+        model_id: Union[None, Unset, str]
+        if isinstance(self.model_id, Unset):
+            model_id = UNSET
+        else:
+            model_id = self.model_id
+
+        parameters: Union[None, Unset, str]
+        if isinstance(self.parameters, Unset):
+            parameters = UNSET
+        else:
+            parameters = self.parameters
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -135,6 +151,10 @@ class ScalewayQaasV1Alpha1Job:
             field_dict["job_duration"] = job_duration
         if result_distribution is not UNSET:
             field_dict["result_distribution"] = result_distribution
+        if model_id is not UNSET:
+            field_dict["model_id"] = model_id
+        if parameters is not UNSET:
+            field_dict["parameters"] = parameters
 
         return field_dict
 
@@ -251,6 +271,24 @@ class ScalewayQaasV1Alpha1Job:
             d.pop("result_distribution", UNSET)
         )
 
+        def _parse_model_id(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        model_id = _parse_model_id(d.pop("model_id", UNSET))
+
+        def _parse_parameters(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        parameters = _parse_parameters(d.pop("parameters", UNSET))
+
         scaleway_qaas_v1_alpha_1_job = cls(
             id=id,
             name=name,
@@ -263,6 +301,8 @@ class ScalewayQaasV1Alpha1Job:
             progress_message=progress_message,
             job_duration=job_duration,
             result_distribution=result_distribution,
+            model_id=model_id,
+            parameters=parameters,
         )
 
         scaleway_qaas_v1_alpha_1_job.additional_properties = d

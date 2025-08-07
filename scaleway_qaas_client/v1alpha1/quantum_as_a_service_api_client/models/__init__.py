@@ -4,6 +4,7 @@ from .cancel_job_body import CancelJobBody
 from .cancel_process_body import CancelProcessBody
 from .create_job_body import CreateJobBody
 from .create_job_body_circuit import CreateJobBodyCircuit
+from .create_model_body import CreateModelBody
 from .create_process_body import CreateProcessBody
 from .create_session_body import CreateSessionBody
 from .create_session_body_booking_demand import CreateSessionBodyBookingDemand
@@ -12,6 +13,7 @@ from .list_applications_order_by import ListApplicationsOrderBy
 from .list_bookings_order_by import ListBookingsOrderBy
 from .list_job_results_order_by import ListJobResultsOrderBy
 from .list_jobs_order_by import ListJobsOrderBy
+from .list_models_order_by import ListModelsOrderBy
 from .list_platforms_order_by import ListPlatformsOrderBy
 from .list_platforms_platform_technology import ListPlatformsPlatformTechnology
 from .list_platforms_platform_type import ListPlatformsPlatformType
@@ -40,6 +42,9 @@ from .scaleway_qaas_v1_alpha_1_list_job_results_response import (
 from .scaleway_qaas_v1_alpha_1_list_jobs_response import (
     ScalewayQaasV1Alpha1ListJobsResponse,
 )
+from .scaleway_qaas_v1_alpha_1_list_models_response import (
+    ScalewayQaasV1Alpha1ListModelsResponse,
+)
 from .scaleway_qaas_v1_alpha_1_list_platforms_response import (
     ScalewayQaasV1Alpha1ListPlatformsResponse,
 )
@@ -58,6 +63,7 @@ from .scaleway_qaas_v1_alpha_1_list_session_ac_ls_response import (
 from .scaleway_qaas_v1_alpha_1_list_sessions_response import (
     ScalewayQaasV1Alpha1ListSessionsResponse,
 )
+from .scaleway_qaas_v1_alpha_1_model import ScalewayQaasV1Alpha1Model
 from .scaleway_qaas_v1_alpha_1_platform import ScalewayQaasV1Alpha1Platform
 from .scaleway_qaas_v1_alpha_1_platform_availability import (
     ScalewayQaasV1Alpha1PlatformAvailability,
@@ -101,6 +107,7 @@ __all__ = (
     "CancelProcessBody",
     "CreateJobBody",
     "CreateJobBodyCircuit",
+    "CreateModelBody",
     "CreateProcessBody",
     "CreateSessionBody",
     "CreateSessionBodyBookingDemand",
@@ -109,6 +116,7 @@ __all__ = (
     "ListBookingsOrderBy",
     "ListJobResultsOrderBy",
     "ListJobsOrderBy",
+    "ListModelsOrderBy",
     "ListPlatformsOrderBy",
     "ListPlatformsPlatformTechnology",
     "ListPlatformsPlatformType",
@@ -127,12 +135,14 @@ __all__ = (
     "ScalewayQaasV1Alpha1ListBookingsResponse",
     "ScalewayQaasV1Alpha1ListJobResultsResponse",
     "ScalewayQaasV1Alpha1ListJobsResponse",
+    "ScalewayQaasV1Alpha1ListModelsResponse",
     "ScalewayQaasV1Alpha1ListPlatformsResponse",
     "ScalewayQaasV1Alpha1ListProcessesResponse",
     "ScalewayQaasV1Alpha1ListProcessResultsResponse",
     "ScalewayQaasV1Alpha1ListSessionACLsRequestOrderBy",
     "ScalewayQaasV1Alpha1ListSessionACLsResponse",
     "ScalewayQaasV1Alpha1ListSessionsResponse",
+    "ScalewayQaasV1Alpha1Model",
     "ScalewayQaasV1Alpha1Platform",
     "ScalewayQaasV1Alpha1PlatformAvailability",
     "ScalewayQaasV1Alpha1PlatformBookingRequirement",
