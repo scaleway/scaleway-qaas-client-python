@@ -394,7 +394,9 @@ class QaaSClient:
         self,
         session_id: str,
         model_id: Optional[str] = None,
-        payload: Optional[Union[Dict, List, str]] = None,
+        payload: Optional[
+            Union[Dict, List, str]
+        ] = None,  # Deprecated, use model_id from create_model(payload) instead
         name: Optional[str] = None,
         parameters: Optional[Union[Dict, List, str]] = None,
     ) -> ScalewayQaasV1Alpha1Job:
@@ -405,7 +407,7 @@ class QaaSClient:
         Args:
             name (str): Name of the job.
             session_id (str): Session in which the job is executed.
-            payload (str): Quantum circuit that should be executed.
+            payload (str): DEPRECATED Quantum circuit that should be executed.
             model_id (Union[None, Unset, str]): Computation model ID to be executed by the job.
             parameters (Union[None, Unset, str]): Execution parameters for this job.
 
@@ -431,9 +433,7 @@ class QaaSClient:
                 name=name,
                 session_id=session_id,
                 model_id=model_id,
-                circuit=(
-                    CreateJobBodyCircuit(qiskit_circuit=payload) if payload else None
-                ),
+                circuit=(CreateJobBodyCircuit(qiskit_circuit=payload)),
                 parameters=parameters,
             ),
         )
