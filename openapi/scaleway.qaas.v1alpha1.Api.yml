@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: Quantum as a Service API
   description: |-
@@ -285,6 +285,9 @@ tags:
 - name: Bookings
   description: |
     A booking is a reserved timeframe for a platform where only one user could send its jobs
+- name: Models
+  description: |
+    A model is a quantum computation (circuit, sequence, hamiltonian...) to be executed by job
 components:
   schemas:
     google.protobuf.Int32Value:
@@ -446,6 +449,14 @@ components:
           type: string
           description: Result of the job, if the job is finished.
           nullable: true
+        model_id:
+          type: string
+          description: Computation model ID executed by the job.
+          nullable: true
+        parameters:
+          type: string
+          description: Execution parameters for this job.
+          nullable: true
       x-properties-order:
       - id
       - name
@@ -458,6 +469,8 @@ components:
       - progress_message
       - job_duration
       - result_distribution
+      - model_id
+      - parameters
     scaleway.qaas.v1alpha1.JobCircuit:
       type: object
       properties:
@@ -559,6 +572,21 @@ components:
       x-properties-order:
       - total_count
       - jobs
+    scaleway.qaas.v1alpha1.ListModelsResponse:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          description: Total number of models.
+          format: uint64
+        models:
+          type: array
+          description: List of models.
+          items:
+            $ref: '#/components/schemas/scaleway.qaas.v1alpha1.Model'
+      x-properties-order:
+      - total_count
+      - models
     scaleway.qaas.v1alpha1.ListPlatformsResponse:
       type: object
       properties:
@@ -638,6 +666,30 @@ components:
       x-properties-order:
       - total_count
       - sessions
+    scaleway.qaas.v1alpha1.Model:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID of the model.
+        created_at:
+          type: string
+          description: Time at which the model was created. (RFC 3339 format)
+          format: date-time
+          example: "2022-03-22T12:34:56.123456Z"
+          nullable: true
+        url:
+          type: string
+          description: Storage URL of the model.
+          nullable: true
+        project_id:
+          type: string
+          description: Project ID in which the model has been created.
+      x-properties-order:
+      - id
+      - created_at
+      - url
+      - project_id
     scaleway.qaas.v1alpha1.Platform:
       type: object
       properties:
@@ -1058,6 +1110,11 @@ components:
           type: string
           description: An optional booking unique ID of an attached booking.
           nullable: true
+        model_id:
+          type: string
+          description: Default computation model ID to be executed by job assigned
+            to this session.
+          nullable: true
       x-properties-order:
       - id
       - name
@@ -1078,6 +1135,7 @@ components:
       - origin_id
       - progress_message
       - booking_id
+      - model_id
     scaleway.qaas.v1alpha1.Session.Access:
       type: string
       enum:
@@ -1475,6 +1533,14 @@ paths:
                   description: Maximum duration of the job. (in seconds)
                   example: 2.5s
                   nullable: true
+                model_id:
+                  type: string
+                  description: Computation model ID to be executed by the job.
+                  nullable: true
+                parameters:
+                  type: string
+                  description: Execution parameters for this job.
+                  nullable: true
               required:
               - name
               - session_id
@@ -1485,6 +1551,8 @@ paths:
               - session_id
               - circuit
               - max_duration
+              - model_id
+              - parameters
       security:
       - scaleway: []
       x-codeSamples:
@@ -1764,6 +1832,146 @@ paths:
       - lang: HTTPie
         source: |-
           http GET "https://api.scaleway.com/qaas/v1alpha1/jobs/{job_id}/results" \
+            X-Auth-Token:$SCW_SECRET_KEY
+  /qaas/v1alpha1/models:
+    get:
+      tags:
+      - Models
+      operationId: ListModels
+      summary: List all models attached to the **project ID**
+      description: Retrieve information about all models of the provided **project
+        ID**.
+      parameters:
+      - in: query
+        name: project_id
+        description: List models belonging to this project ID.
+        required: true
+        schema:
+          type: string
+          description: List models belonging to this project ID.
+      - in: query
+        name: page
+        description: Page number.
+        schema:
+          type: integer
+          description: Page number.
+          format: int32
+      - in: query
+        name: page_size
+        description: Maximum number of results to return per page.
+        schema:
+          type: integer
+          description: Maximum number of results to return per page.
+          format: uint32
+      - in: query
+        name: order_by
+        description: Sort order of the returned results.
+        schema:
+          type: string
+          description: Sort order of the returned results.
+          enum:
+          - created_at_desc
+          - created_at_asc
+          default: created_at_desc
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scaleway.qaas.v1alpha1.ListModelsResponse'
+      security:
+      - scaleway: []
+      x-codeSamples:
+      - lang: cURL
+        source: |-
+          curl -X GET \
+            -H "X-Auth-Token: $SCW_SECRET_KEY" \
+            "https://api.scaleway.com/qaas/v1alpha1/models?project_id=string"
+      - lang: HTTPie
+        source: |-
+          http GET "https://api.scaleway.com/qaas/v1alpha1/models" \
+            X-Auth-Token:$SCW_SECRET_KEY \
+            project_id==string
+    post:
+      tags:
+      - Models
+      operationId: CreateModel
+      summary: Create a new model
+      description: Create and register a new model that can be executed through next
+        jobs. A model can also be assigned to a Session.
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scaleway.qaas.v1alpha1.Model'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project_id:
+                  type: string
+                  description: Project ID to attach this model.
+                payload:
+                  type: string
+                  description: The serialized model data.
+                  nullable: true
+              x-properties-order:
+              - project_id
+              - payload
+      security:
+      - scaleway: []
+      x-codeSamples:
+      - lang: cURL
+        source: |-
+          curl -X POST \
+            -H "X-Auth-Token: $SCW_SECRET_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"project_id":"string"}' \
+            "https://api.scaleway.com/qaas/v1alpha1/models"
+      - lang: HTTPie
+        source: |-
+          http POST "https://api.scaleway.com/qaas/v1alpha1/models" \
+            X-Auth-Token:$SCW_SECRET_KEY \
+            project_id="string"
+  /qaas/v1alpha1/models/{model_id}:
+    get:
+      tags:
+      - Models
+      operationId: GetModel
+      summary: Get model information
+      description: Retrieve information about of the provided **model ID**.
+      parameters:
+      - in: path
+        name: model_id
+        description: Unique ID of the model.
+        required: true
+        schema:
+          type: string
+          description: Unique ID of the model.
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scaleway.qaas.v1alpha1.Model'
+      security:
+      - scaleway: []
+      x-codeSamples:
+      - lang: cURL
+        source: |-
+          curl -X GET \
+            -H "X-Auth-Token: $SCW_SECRET_KEY" \
+            "https://api.scaleway.com/qaas/v1alpha1/models/{model_id}"
+      - lang: HTTPie
+        source: |-
+          http GET "https://api.scaleway.com/qaas/v1alpha1/models/{model_id}" \
             X-Auth-Token:$SCW_SECRET_KEY
   /qaas/v1alpha1/platforms:
     get:
@@ -2438,6 +2646,11 @@ paths:
                   - started_at
                   - finished_at
                   - description
+                model_id:
+                  type: string
+                  description: Default computation model ID to be executed by job
+                    assigned to this session.
+                  nullable: true
               required:
               - project_id
               - platform_id
@@ -2450,6 +2663,7 @@ paths:
               - tags
               - deduplication_id
               - booking_demand
+              - model_id
       security:
       - scaleway: []
       x-codeSamples:

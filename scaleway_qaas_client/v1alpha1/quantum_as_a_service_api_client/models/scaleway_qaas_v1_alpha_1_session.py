@@ -47,6 +47,7 @@ class ScalewayQaasV1Alpha1Session:
         origin_id (Union[None, Unset, str]): Unique ID of the session's origin resource (if exists).
         progress_message (Union[None, Unset, str]): Any progress of the session.
         booking_id (Union[None, Unset, str]): An optional booking unique ID of an attached booking.
+        model_id (Union[None, Unset, str]): Default computation model ID to be executed by job assigned to this session.
     """
 
     id: Union[Unset, str] = UNSET
@@ -72,6 +73,7 @@ class ScalewayQaasV1Alpha1Session:
     origin_id: Union[None, Unset, str] = UNSET
     progress_message: Union[None, Unset, str] = UNSET
     booking_id: Union[None, Unset, str] = UNSET
+    model_id: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -168,6 +170,12 @@ class ScalewayQaasV1Alpha1Session:
         else:
             booking_id = self.booking_id
 
+        model_id: Union[None, Unset, str]
+        if isinstance(self.model_id, Unset):
+            model_id = UNSET
+        else:
+            model_id = self.model_id
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -209,6 +217,8 @@ class ScalewayQaasV1Alpha1Session:
             field_dict["progress_message"] = progress_message
         if booking_id is not UNSET:
             field_dict["booking_id"] = booking_id
+        if model_id is not UNSET:
+            field_dict["model_id"] = model_id
 
         return field_dict
 
@@ -373,6 +383,15 @@ class ScalewayQaasV1Alpha1Session:
 
         booking_id = _parse_booking_id(d.pop("booking_id", UNSET))
 
+        def _parse_model_id(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        model_id = _parse_model_id(d.pop("model_id", UNSET))
+
         scaleway_qaas_v1_alpha_1_session = cls(
             id=id,
             name=name,
@@ -393,6 +412,7 @@ class ScalewayQaasV1Alpha1Session:
             origin_id=origin_id,
             progress_message=progress_message,
             booking_id=booking_id,
+            model_id=model_id,
         )
 
         scaleway_qaas_v1_alpha_1_session.additional_properties = d

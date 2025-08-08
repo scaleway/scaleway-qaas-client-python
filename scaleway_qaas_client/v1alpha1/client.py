@@ -80,6 +80,15 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.processes.list_process_results import (
     sync_detailed as _list_process_results_sync,
 )
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.models.get_model import (
+    sync_detailed as _get_model_sync,
+)
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.models.list_models import (
+    sync_detailed as _list_models_sync,
+)
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.models.create_model import (
+    sync_detailed as _create_model_sync,
+)
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.client import (
     AuthenticatedClient,
 )
@@ -88,6 +97,7 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.models import
     CancelProcessBody,
     CreateProcessBody,
     CreateJobBody,
+    CreateModelBody,
     CreateJobBodyCircuit,
     CreateSessionBody,
     ScalewayQaasV1Alpha1Job,
@@ -98,6 +108,7 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.models import
     ScalewayQaasV1Alpha1Application,
     ScalewayQaasV1Alpha1Process,
     ScalewayQaasV1Alpha1ProcessResult,
+    ScalewayQaasV1Alpha1Model,
     TerminateSessionBody,
 )
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.types import Response
@@ -205,6 +216,7 @@ class QaaSClient:
         max_idle_duration: Union[str, int] = "59m",
         deduplication_id: Optional[str] = None,
         name: Optional[str] = None,
+        model_id: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
         """Create a session
 
@@ -215,8 +227,9 @@ class QaaSClient:
             name (Union[None, Unset, str]): Name of the session.
             max_idle_duration (Union[None, Unset, str]): Maximum idle duration before the session ends. (in seconds)
                 Example: 2.5s.
-            max_duration (Union[None, Unset, str]): Maximum duration before the session ends. (in seconds) Example: 2.5s.
+            max_duration (Union[None, Unset, str]): Maximum duration before the session ends. (in seconds) Example: 20m.
             deduplication_id (Union[None, Unset, str]): Deduplication ID of the session.
+            model_id (Union[None, Unset, str]): Default computation model ID to be executed by job assigned to this session.
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -246,6 +259,7 @@ class QaaSClient:
                 deduplication_id=deduplication_id,
                 max_duration=max_duration,
                 max_idle_duration=max_idle_duration,
+                model_id=model_id,
             ),
         )
 
@@ -379,8 +393,12 @@ class QaaSClient:
     def create_job(
         self,
         session_id: str,
-        payload: Union[Dict, List, str],
+        model_id: Optional[str] = None,
+        payload: Optional[
+            Union[Dict, List, str]
+        ] = None,  # Deprecated, use model_id from create_model(payload) instead
         name: Optional[str] = None,
+        parameters: Optional[Union[Dict, List, str]] = None,
     ) -> ScalewayQaasV1Alpha1Job:
         """Create a job
 
@@ -389,7 +407,9 @@ class QaaSClient:
         Args:
             name (str): Name of the job.
             session_id (str): Session in which the job is executed.
-            payload (str): Quantum circuit that should be executed.
+            payload (str): DEPRECATED Quantum circuit that should be executed.
+            model_id (Union[None, Unset, str]): Computation model ID to be executed by the job.
+            parameters (Union[None, Unset, str]): Execution parameters for this job.
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -402,10 +422,9 @@ class QaaSClient:
         if not session_id:
             raise Exception("create_job: session_id cannot be None")
 
-        if not payload:
-            raise Exception("create_job: payload cannot be None")
+        if payload:
+            payload = payload if isinstance(payload, str) else json.dumps(payload)
 
-        payload = payload if isinstance(payload, str) else json.dumps(payload)
         name = name or f"qj-{randomname.get_name()}"
 
         response = _create_job_sync(
@@ -413,7 +432,9 @@ class QaaSClient:
             body=CreateJobBody(
                 name=name,
                 session_id=session_id,
-                circuit=CreateJobBodyCircuit(qiskit_circuit=payload),
+                model_id=model_id,
+                circuit=(CreateJobBodyCircuit(qiskit_circuit=payload)),
+                parameters=parameters,
             ),
         )
 
@@ -756,3 +777,83 @@ class QaaSClient:
         _raise_on_error(response)
 
         return response.parsed.process_results
+
+    def create_model(
+        self, payload: Union[str, Dict, List]
+    ) -> ScalewayQaasV1Alpha1Model:
+        """Create a new model
+
+        Create and register a new model that can be executed through next jobs. A model can also be assigned
+        to a Session.
+
+        Args:
+            payload (Union[None, Unset, str]): The serialized model data.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            ScalewayQaasV1Alpha1Model
+        """
+        if not payload:
+            raise Exception("create_model: payload cannot be None")
+
+        payload = payload if isinstance(payload, str) else json.dumps(payload)
+
+        response = _create_model_sync(
+            client=self.__client,
+            body=CreateModelBody(
+                project_id=self.__project_id,
+                payload=payload,
+            ),
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed
+
+    def get_model(self, model_id: str) -> ScalewayQaasV1Alpha1Model:
+        """Get model information
+
+        Retrieve information about of the provided **model ID**.
+
+        Args:
+            model_id (str): Unique ID of the model.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1Model]
+        """
+        if not model_id:
+            raise Exception("get_model: model_id cannot be None")
+
+        response = _get_model_sync(client=self.__client, model_id=model_id)
+
+        _raise_on_error(response)
+
+        return response.parsed
+
+    def list_models(self) -> List[ScalewayQaasV1Alpha1Model]:
+        """List all models attached to the **project ID**
+
+        Retrieve information about all models of the provided **project ID**.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1ListModelsResponse]
+        """
+        response = _list_models_sync(
+            client=self.__client,
+            project_id=self.__project_id,
+        )
+
+        _raise_on_error(response)
+
+        return response.parsed.models
