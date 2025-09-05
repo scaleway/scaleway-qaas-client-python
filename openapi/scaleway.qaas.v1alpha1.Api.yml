@@ -1115,6 +1115,10 @@ components:
           description: Default computation model ID to be executed by job assigned
             to this session.
           nullable: true
+        parameters:
+          type: string
+          description: Platform configuration parameters applied to this session.
+          nullable: true
       x-properties-order:
       - id
       - name
@@ -1136,6 +1140,7 @@ components:
       - progress_message
       - booking_id
       - model_id
+      - parameters
     scaleway.qaas.v1alpha1.Session.Access:
       type: string
       enum:
@@ -2651,6 +2656,11 @@ paths:
                   description: Default computation model ID to be executed by job
                     assigned to this session.
                   nullable: true
+                parameters:
+                  type: string
+                  description: Optional platform configuration parameters applied
+                    to this session.
+                  nullable: true
               required:
               - project_id
               - platform_id
@@ -2664,6 +2674,7 @@ paths:
               - deduplication_id
               - booking_demand
               - model_id
+              - parameters
       security:
       - scaleway: []
       x-codeSamples:

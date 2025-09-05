@@ -34,6 +34,9 @@ from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1JobStatus as QaaSJobStatus,
 )
 from .quantum_as_a_service_api_client.models import (
+    ScalewayQaasV1Alpha1Model as QaaSModel,
+)
+from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1Platform as QaaSPlatform,
 )
 from .quantum_as_a_service_api_client.models import (
@@ -55,11 +58,8 @@ from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1Session as QaaSSession,
 )
 from .quantum_as_a_service_api_client.models import (
-    ScalewayQaasV1Alpha1SessionStatus as QaaSSessionStatus,
-)
-from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1SessionAccess as QaaSSessionAccess,
 )
 from .quantum_as_a_service_api_client.models import (
-    ScalewayQaasV1Alpha1Model as QaaSModel,
+    ScalewayQaasV1Alpha1SessionStatus as QaaSSessionStatus,
 )

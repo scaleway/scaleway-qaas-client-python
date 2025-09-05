@@ -31,6 +31,7 @@ class CreateSessionBody:
         booking_demand (Union[Unset, CreateSessionBodyBookingDemand]): A booking demand to schedule the session, only
             applicable if the platform is bookable.
         model_id (Union[None, Unset, str]): Default computation model ID to be executed by job assigned to this session.
+        parameters (Union[None, Unset, str]): Optional platform configuration parameters applied to this session.
     """
 
     project_id: str
@@ -42,6 +43,7 @@ class CreateSessionBody:
     deduplication_id: Union[None, Unset, str] = UNSET
     booking_demand: Union[Unset, "CreateSessionBodyBookingDemand"] = UNSET
     model_id: Union[None, Unset, str] = UNSET
+    parameters: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -92,6 +94,12 @@ class CreateSessionBody:
         else:
             model_id = self.model_id
 
+        parameters: Union[None, Unset, str]
+        if isinstance(self.parameters, Unset):
+            parameters = UNSET
+        else:
+            parameters = self.parameters
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -114,6 +122,8 @@ class CreateSessionBody:
             field_dict["booking_demand"] = booking_demand
         if model_id is not UNSET:
             field_dict["model_id"] = model_id
+        if parameters is not UNSET:
+            field_dict["parameters"] = parameters
 
         return field_dict
 
@@ -197,6 +207,15 @@ class CreateSessionBody:
 
         model_id = _parse_model_id(d.pop("model_id", UNSET))
 
+        def _parse_parameters(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        parameters = _parse_parameters(d.pop("parameters", UNSET))
+
         create_session_body = cls(
             project_id=project_id,
             platform_id=platform_id,
@@ -207,6 +226,7 @@ class CreateSessionBody:
             deduplication_id=deduplication_id,
             booking_demand=booking_demand,
             model_id=model_id,
+            parameters=parameters,
         )
 
         create_session_body.additional_properties = d
