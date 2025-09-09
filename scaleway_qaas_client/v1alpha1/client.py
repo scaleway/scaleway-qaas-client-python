@@ -100,6 +100,8 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.models import
     CreateModelBody,
     CreateProcessBody,
     CreateSessionBody,
+    ListPlatformsPlatformTechnology,
+    ListPlatformsPlatformType,
     ScalewayQaasV1Alpha1Application,
     ScalewayQaasV1Alpha1Job,
     ScalewayQaasV1Alpha1JobResult,
@@ -110,12 +112,10 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.models import
     ScalewayQaasV1Alpha1Session,
     ScalewayQaasV1Alpha1SessionAccess,
     TerminateSessionBody,
-    ListPlatformsPlatformType,
-    ListPlatformsPlatformTechnology,
 )
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.types import (
-    Response,
     UNSET,
+    Response,
 )
 
 _DEFAULT_URL = "https://api.scaleway.com"
