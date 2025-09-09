@@ -110,8 +110,13 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.models import
     ScalewayQaasV1Alpha1Session,
     ScalewayQaasV1Alpha1SessionAccess,
     TerminateSessionBody,
+    ListPlatformsPlatformType,
+    ListPlatformsPlatformTechnology,
 )
-from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.types import Response
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.types import (
+    Response,
+    UNSET,
+)
 
 _DEFAULT_URL = "https://api.scaleway.com"
 
@@ -180,6 +185,8 @@ class QaaSClient:
         name: Optional[str] = None,
         backend_name: Optional[str] = None,
         provider_name: Optional[str] = None,
+        platform_type: Optional[str] = None,
+        platform_technology: Optional[str] = None,
     ) -> List[ScalewayQaasV1Alpha1Platform]:
         """List all available platforms
 
@@ -189,6 +196,8 @@ class QaaSClient:
             provider_name (Union[Unset, str]): List platforms with this provider name.
             backend_name (Union[Unset, str]): List platforms with this backend name.
             name (Union[Unset, str]): List platforms with this name.
+            platform_type (Union[Unset, ListPlatformsPlatformType]): List platforms with this type.
+            platform_technology (Union[Unset, ListPlatformsPlatformTechnology]): List platforms with this technology.
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -198,11 +207,23 @@ class QaaSClient:
             List[ScalewayQaasV1Alpha1ListPlatforms]
         """
 
+        if isinstance(platform_technology, str):
+            platform_technology = ListPlatformsPlatformTechnology[platform_technology]
+        elif not platform_technology:
+            platform_technology = UNSET
+
+        if isinstance(platform_type, str):
+            platform_type = ListPlatformsPlatformType[platform_type]
+        elif not platform_type:
+            platform_type = UNSET
+
         response = _list_platforms_sync(
             client=self.__client,
             name=name,
             provider_name=provider_name,
             backend_name=backend_name,
+            platform_type=platform_type,
+            platform_technology=platform_technology,
         )
 
         _raise_on_error(response)
