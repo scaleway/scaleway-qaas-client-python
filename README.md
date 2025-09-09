@@ -37,8 +37,24 @@ while session.status == "starting":
 client.delete_session(session.id)
 ```
 
-## Development
+## Development and contribution
 This repository is at its early stage and is still in active development. If you are looking for a way to contribute please read [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Install dev package
+To install necessary packages for contribution development, please install via:
+
+```bash
+make install
+```
+
+### Code generation
+We use open API format (in [openapi/ folder](openapi)) and generate client version manually.
+
+Here how to generate the `v1alpha1` version:
+
+```bash
+make v1alpha1
+```
 
 ## Reach us
 We love feedback. Feel free to reach us on [Scaleway Slack community](https://slack.scaleway.com/), we are waiting for you on [#opensource](https://scaleway-community.slack.com/app_redirect?channel=opensource)..
