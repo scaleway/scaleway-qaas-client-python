@@ -13,7 +13,7 @@
 # limitations under the License.
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from dataclasses_json import dataclass_json
 
@@ -31,6 +31,18 @@ class QaaSCircuitSerializationFormat(Enum):
 class QaaSCircuitData:
     serialization_format: QaaSCircuitSerializationFormat
     circuit_serialization: str
+
+
+class QaaSNoiseModelSerializationFormat(Enum):
+    UNKOWN_CIRCUIT_SERIALIZATION = 0
+    JSON = 1
+
+
+@dataclass_json
+@dataclass
+class QaaSNoiseModelData:
+    serialization_format: QaaSNoiseModelSerializationFormat
+    noise_model_serialization: str
 
 
 @dataclass_json
@@ -60,3 +72,4 @@ class QaaSJobData:
     client: QaaSJobClientData
     backend: QaaSJobBackendData
     run: QaaSJobRunData
+    noise_model: Optional[QaaSNoiseModelData]
