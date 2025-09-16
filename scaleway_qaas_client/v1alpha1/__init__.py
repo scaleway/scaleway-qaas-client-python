@@ -19,6 +19,8 @@ from .job_payload.models import (
     QaaSJobClientData,
     QaaSJobData,
     QaaSJobRunData,
+    QaaSNoiseModelData,
+    QaaSNoiseModelSerializationFormat,
 )
 from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1Application as QaaSApplication,
