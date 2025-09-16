@@ -72,4 +72,4 @@ class QaaSJobData:
     client: QaaSJobClientData
     backend: QaaSJobBackendData
     run: QaaSJobRunData
-    noise_model: Optional[QaaSNoiseModelData]
+    noise_model: Optional[QaaSNoiseModelData] = None
