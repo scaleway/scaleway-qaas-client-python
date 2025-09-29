@@ -43,7 +43,7 @@ class QaaSNoiseModelSerializationFormat(Enum):
 @dataclass
 class QaaSNoiseModelData:
     serialization_format: QaaSNoiseModelSerializationFormat
-    noise_model_serialization: str
+    noise_model_serialization: bytes
 
 
 @dataclass_json
