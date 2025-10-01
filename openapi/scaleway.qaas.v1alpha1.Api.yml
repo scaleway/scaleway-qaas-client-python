@@ -863,11 +863,30 @@ components:
                 can be booked in the future. (in seconds)
               example: 2.5s
               nullable: true
+            min_planification_duration:
+              type: string
+              description: Minimum planification time before a platform can be booked.
+                (in seconds)
+              example: 2.5s
+              nullable: true
+            max_booking_per_week:
+              type: integer
+              description: Maximum amount of booking allowed for one organization
+                per week.
+              format: uint32
+            max_booking_per_day:
+              type: integer
+              description: Maximum amount of booking allowed for one organization
+                per day.
+              format: uint32
           x-properties-order:
           - min_duration
           - max_duration
           - max_cancellation_duration
           - max_planification_duration
+          - min_planification_duration
+          - max_booking_per_week
+          - max_booking_per_day
         description:
           type: string
           description: English description of the platform.

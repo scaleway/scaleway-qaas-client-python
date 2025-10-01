@@ -41,3 +41,6 @@ install-test:
 .PHONY: test
 test:
 	pytest -s --showprogress -vv tests/
+
+.PHONY: all
+all: v1alpha1
