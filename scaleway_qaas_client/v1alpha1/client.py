@@ -16,6 +16,7 @@ from typing import Dict, List, Optional, Union
 
 import randomname
 from pytimeparse.timeparse import timeparse
+from datetime import datetime
 
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.applications.get_application import (
     sync_detailed as _get_application_sync,
@@ -247,8 +248,8 @@ class QaaSClient:
         name: Optional[str] = None,
         model_id: Optional[str] = None,
         parameters: Optional[Union[Dict, List, str]] = None,
-        booking_demand_started_at: Optional[str] = None,
-        booking_demand_finished_at: Optional[str] = None,
+        booking_demand_started_at: Optional[datetime] = None,
+        booking_demand_finished_at: Optional[datetime] = None,
         booking_demand_description: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
         """Create a session
@@ -263,6 +264,9 @@ class QaaSClient:
             max_duration (Union[None, Unset, str]): Maximum duration before the session ends. (in seconds) Example: 20m.
             deduplication_id (Union[None, Unset, str]): Deduplication ID of the session.
             model_id (Union[None, Unset, str]): Default computation model ID to be executed by job assigned to this session.
+            booking_demand_started_at (Union[None, Unset, datetime.datetime]): Wished started time for an exclusive session over a QPU, only works if the platform is_bookable (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
+            booking_demand_finished_at (Union[None, Unset, datetime.datetime]): Wished finished time for an exclusive session over a QPU, only works if the platform is_bookable (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
+            booking_demand_description (Union[None, Unset, str]): User description of the booking
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
