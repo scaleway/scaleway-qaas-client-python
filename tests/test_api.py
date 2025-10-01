@@ -152,6 +152,10 @@ def test_create_delete_session():
         client.delete_session(session.id)
 
 
+def test_platform_bookings():
+    client = _get_client()
+
+
 def test_create_session_same_deduplication_id():
     client = _get_client()
 
