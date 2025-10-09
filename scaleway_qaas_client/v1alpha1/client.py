@@ -305,9 +305,14 @@ class QaaSClient:
         booking_demand = UNSET
 
         if booking_demand_started_at and booking_demand_finished_at:
+            booking_demand_started_at_timestamp = booking_demand_started_at.timestamp()
+            booking_demand_finished_at_timestamp = booking_demand_finished_at.timestamp()
+            # seconds = int(booking_demand_started_at_timestamp)
+            # nanos = int(booking_demand_started_at_timestamp % 1 * 1e9)
+
             booking_demand = CreateSessionBodyBookingDemand(
-                started_at=booking_demand_started_at,
-                finished_at=booking_demand_finished_at,
+                started_at=booking_demand_started_at_timestamp,
+                finished_at=booking_demand_finished_at_timestamp,
                 description=booking_demand_description,
             )
 
@@ -955,7 +960,7 @@ class QaaSClient:
     def list_platform_bookings(
         self, platform_id: str
     ) -> List[ScalewayQaasV1Alpha1Booking]:
-        """List all bookings according of the target platform
+        """List all bookings of the target platform
 
         Retrieve information about all bookings of the provided ** platform ID**.
 
@@ -979,9 +984,9 @@ class QaaSClient:
     def list_bookings(
         self, platform_id: Optional[str] = None
     ) -> List[ScalewayQaasV1Alpha1Booking]:
-        """List all bookings according the filter of the current project.
+        """List all bookings according of the current project
 
-        Retrieve information about all bookings of the project ID.
+        Retrieve information about all bookings of the project ID, can be filtered by platform ID.
 
         Args:
             platform_id (Union[Unset, str]): Will list only bookings attached to this platform ID.
@@ -1007,3 +1012,9 @@ class QaaSClient:
         _raise_on_error(response)
 
         return response.parsed.bookings
+
+
+# def _datetime_to_timestamp(time : datetime) -> Tuple[int, int]:
+#     timestamp = time.timestamp()
+#     seconds = int(timestamp)
+#     nanos = int(booking_demand_started_at_timestamp % 1 * 1e9)
