@@ -36,7 +36,7 @@ class QaaSCircuitData:
 class QaaSNoiseModelSerializationFormat(Enum):
     UNKOWN_CIRCUIT_SERIALIZATION = 0
     JSON = 1
-    PATCHED_JSON = 2
+    AER_COMPRESSED_JSON = 2
 
 
 @dataclass_json
