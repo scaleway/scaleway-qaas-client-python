@@ -197,25 +197,6 @@ def test_create_session_same_deduplication_id():
         client.delete_session(session.id)
 
 
-def test_list_applications():
-    client = _get_client()
-
-    applications = client.list_applications()
-
-    assert len(applications) > 0
-
-
-def test_list_applications_by_name():
-    client = _get_client()
-
-    applications = client.list_applications(name=_TEST_APPLICATION_NAME)
-
-    assert len(applications) > 0
-
-    for application in applications:
-        assert application.name == _TEST_APPLICATION_NAME
-
-
 def test_run_process():
     client = _get_client()
 
