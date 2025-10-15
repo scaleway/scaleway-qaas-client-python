@@ -36,13 +36,14 @@ class QaaSCircuitData:
 class QaaSNoiseModelSerializationFormat(Enum):
     UNKOWN_CIRCUIT_SERIALIZATION = 0
     JSON = 1
+    AER_COMPRESSED_JSON = 2
 
 
 @dataclass_json
 @dataclass
 class QaaSNoiseModelData:
     serialization_format: QaaSNoiseModelSerializationFormat
-    noise_model_serialization: str
+    noise_model_serialization: bytes
 
 
 @dataclass_json
