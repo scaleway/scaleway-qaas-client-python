@@ -306,7 +306,9 @@ class QaaSClient:
 
         if booking_demand_started_at and booking_demand_finished_at:
             booking_demand_started_at_timestamp = booking_demand_started_at.timestamp()
-            booking_demand_finished_at_timestamp = booking_demand_finished_at.timestamp()
+            booking_demand_finished_at_timestamp = (
+                booking_demand_finished_at.timestamp()
+            )
             # seconds = int(booking_demand_started_at_timestamp)
             # nanos = int(booking_demand_started_at_timestamp % 1 * 1e9)
 
@@ -1012,9 +1014,3 @@ class QaaSClient:
         _raise_on_error(response)
 
         return response.parsed.bookings
-
-
-# def _datetime_to_timestamp(time : datetime) -> Tuple[int, int]:
-#     timestamp = time.timestamp()
-#     seconds = int(timestamp)
-#     nanos = int(booking_demand_started_at_timestamp % 1 * 1e9)

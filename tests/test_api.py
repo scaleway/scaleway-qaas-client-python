@@ -172,18 +172,19 @@ def test_list_platform_bookings():
 
     assert len(bookings) > 0
 
+
 def test_create_and_cancel_booking():
     client = _get_client()
 
+    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+    assert len(platforms) > 0
+
+    target_platform = platforms[0]
+
     try:
-        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
-
-        assert len(platforms) > 0
-
-        target_platform = platforms[0]
-
         now = datetime.now(timezone.utc)
-        booking_start = now + timedelta(days=7)
+        booking_start = now + timedelta(seconds=15)
         booking_finish = booking_start + timedelta(hours=1)
         booking_description = "my lovely booking"
 
@@ -191,7 +192,7 @@ def test_create_and_cancel_booking():
             platform_id=target_platform.id,
             booking_demand_started_at=booking_start,
             booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description
+            booking_demand_description=booking_description,
         )
 
         assert session is not None
@@ -210,9 +211,12 @@ def test_create_and_cancel_booking():
 
         while True:
             time.sleep(2)
+            session = client.get_session(session_id=session.id)
             booking = client.get_booking(booking_id=session.booking_id)
 
-            assert booking.status in ["starting", "running"]
+            print(session.status, booking.status)
+
+            assert session.status in ["starting", "running"]
             assert booking.status in ["waiting", "validating", "validated"]
 
             if booking.status == "validated":
@@ -230,8 +234,6 @@ def test_create_session_same_deduplication_id():
 
     try:
         platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
-
-        assert len(platforms) > 0
 
         platform = platforms[0]
 
@@ -266,5 +268,167 @@ def test_create_session_same_deduplication_id():
         assert second_session.max_idle_duration == session.max_idle_duration
         assert second_session.status in session.status
         assert second_session.deduplication_id == session.deduplication_id
+    finally:
+        client.delete_session(session.id)
+
+
+def test_create_overlaping_booking():
+    client = _get_client()
+
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+        assert len(platforms) > 0
+
+        target_platform = platforms[0]
+
+        now = datetime.now(timezone.utc)
+        booking_start = now + timedelta(days=1)
+        booking_finish = booking_start + timedelta(hours=1)
+        booking_description = "my overlaping booking"
+
+        session = client.create_session(
+            platform_id=target_platform.id,
+            booking_demand_started_at=booking_start,
+            booking_demand_finished_at=booking_finish,
+            booking_demand_description=booking_description,
+        )
+
+        assert session == None
+    finally:
+        client.delete_session(session.id)
+
+
+def test_create_too_long_booking():
+    client = _get_client()
+
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+        assert len(platforms) > 0
+
+        target_platform = platforms[0]
+
+        now = datetime.now(timezone.utc)
+        booking_start = now + timedelta(minutes=1)
+        booking_finish = booking_start + timedelta(hours=10)
+        booking_description = "my too long booking"
+
+        session = client.create_session(
+            platform_id=target_platform.id,
+            booking_demand_started_at=booking_start,
+            booking_demand_finished_at=booking_finish,
+            booking_demand_description=booking_description,
+        )
+
+        assert session == None
+    finally:
+        client.delete_session(session.id)
+
+
+def test_create_too_short_booking():
+    client = _get_client()
+
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+        assert len(platforms) > 0
+
+        target_platform = platforms[0]
+
+        now = datetime.now(timezone.utc)
+        booking_start = now + timedelta(minutes=1)
+        booking_finish = booking_start + timedelta(seconds=10)
+        booking_description = "my lovely booking"
+
+        session = client.create_session(
+            platform_id=target_platform.id,
+            booking_demand_started_at=booking_start,
+            booking_demand_finished_at=booking_finish,
+            booking_demand_description=booking_description,
+        )
+
+        assert session == None
+    finally:
+        client.delete_session(session.id)
+
+
+def test_create_too_short_booking():
+    client = _get_client()
+
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+        assert len(platforms) > 0
+
+        target_platform = platforms[0]
+
+        now = datetime.now(timezone.utc)
+        booking_start = now + timedelta(minutes=1)
+        booking_finish = booking_start + timedelta(seconds=10)
+        booking_description = "my lovely booking"
+
+        session = client.create_session(
+            platform_id=target_platform.id,
+            booking_demand_started_at=booking_start,
+            booking_demand_finished_at=booking_finish,
+            booking_demand_description=booking_description,
+        )
+
+        assert session == None
+    finally:
+        client.delete_session(session.id)
+
+
+def test_create_too_far_booking():
+    client = _get_client()
+
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+        assert len(platforms) > 0
+
+        target_platform = platforms[0]
+
+        now = datetime.now(timezone.utc)
+        booking_start = now + timedelta(days=30)
+        booking_finish = booking_start + timedelta(hours=2)
+        booking_description = "my lovely booking"
+
+        session = client.create_session(
+            platform_id=target_platform.id,
+            booking_demand_started_at=booking_start,
+            booking_demand_finished_at=booking_finish,
+            booking_demand_description=booking_description,
+        )
+
+        assert session == None
+    finally:
+        client.delete_session(session.id)
+
+
+def test_create_too_close_booking():
+    client = _get_client()
+
+    try:
+        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+        assert len(platforms) > 0
+
+        target_platform = platforms[0]
+
+        now = datetime.now(timezone.utc)
+        booking_start = now + timedelta(seconds=10)
+        booking_finish = booking_start + timedelta(hours=2)
+        booking_description = "my lovely booking"
+
+        session = client.create_session(
+            platform_id=target_platform.id,
+            booking_demand_started_at=booking_start,
+            booking_demand_finished_at=booking_finish,
+            booking_demand_description=booking_description,
+        )
+
+        assert session == None
     finally:
         client.delete_session(session.id)
