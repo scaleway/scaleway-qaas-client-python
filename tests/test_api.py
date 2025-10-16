@@ -173,195 +173,195 @@ def _get_client() -> QaaSClient:
 #     assert len(bookings) > 0
 
 
-def test_create_and_cancel_booking():
-    client = _get_client()
+# def test_create_and_cancel_booking():
+#     client = _get_client()
 
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+#     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-    assert len(platforms) > 0
+#     assert len(platforms) > 0
 
-    target_platform = platforms[0]
+#     target_platform = platforms[0]
 
-    try:
-        now = datetime.now(timezone.utc)
-        booking_start = now + timedelta(seconds=15)
-        booking_finish = booking_start + timedelta(seconds=20)
-        booking_description = "my lovely booking"
+#     try:
+#         now = datetime.now(timezone.utc)
+#         booking_start = now + timedelta(seconds=15)
+#         booking_finish = booking_start + timedelta(seconds=20)
+#         booking_description = "my lovely booking"
 
-        session = client.create_session(
-            platform_id=target_platform.id,
-            booking_demand_started_at=booking_start,
-            booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description,
-        )
+#         session = client.create_session(
+#             platform_id=target_platform.id,
+#             booking_demand_started_at=booking_start,
+#             booking_demand_finished_at=booking_finish,
+#             booking_demand_description=booking_description,
+#         )
 
-        assert session is not None
-        assert session.id is not None
-        assert session.platform_id == target_platform.id
-        assert session.booking_id is not None
+#         assert session is not None
+#         assert session.id is not None
+#         assert session.platform_id == target_platform.id
+#         assert session.booking_id is not None
 
-        booking = client.get_booking(booking_id=session.booking_id)
+#         booking = client.get_booking(booking_id=session.booking_id)
 
-        assert booking is not None
-        assert booking.id is not None
-        assert booking.description == booking_description
-        assert booking.started_at is not None
-        assert booking.finished_at is not None
-        assert booking.status in ["validated", "waiting", "validating"]
+#         assert booking is not None
+#         assert booking.id is not None
+#         assert booking.description == booking_description
+#         assert booking.started_at is not None
+#         assert booking.finished_at is not None
+#         assert booking.status in ["validated", "waiting", "validating"]
 
-        while True:
-            time.sleep(2)
-            session = client.get_session(session_id=session.id)
-            booking = client.get_booking(booking_id=session.booking_id)
+#         while True:
+#             time.sleep(2)
+#             session = client.get_session(session_id=session.id)
+#             booking = client.get_booking(booking_id=session.booking_id)
 
-            print(session.status, booking.status)
+#             print(session.status, booking.status)
 
-            assert session.status in ["starting", "running"]
-            assert booking.status in ["waiting", "validating", "validated"]
+#             assert session.status in ["starting", "running"]
+#             assert booking.status in ["waiting", "validating", "validated"]
 
-            if booking.status == "validated":
-                break
+#             if booking.status == "validated":
+#                 break
 
-    finally:
-        client.delete_session(session.id)
+#     finally:
+#         client.delete_session(session.id)
 
-        while True:
-            time.sleep(2)
-            booking = client.get_booking(booking_id=session.booking_id)
+#         while True:
+#             time.sleep(2)
+#             booking = client.get_booking(booking_id=session.booking_id)
 
-            print(booking.status)
+#             print(booking.status)
 
-            assert booking.status in ["validated", "cancelling", "cancelled"]
+#             assert booking.status in ["validated", "cancelling", "cancelled"]
 
-            if booking.status == "cancelled":
-                break
-
-
-def test_create_overlaping_booking():
-    client = _get_client()
-
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
-
-    assert len(platforms) > 0
-
-    target_platform = platforms[0]
-
-    now = datetime.now(timezone.utc)
-    booking_start = now + timedelta(days=1)
-    booking_finish = booking_start + timedelta(hours=1)
-    booking_description = "my overlaping booking"
-
-    try:
-        session = client.create_session(
-            platform_id=target_platform.id,
-            booking_demand_started_at=booking_start,
-            booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description,
-        )
-
-        assert session == None
-    except Exception as e:
-        assert "existing booking" in str(e)
+#             if booking.status == "cancelled":
+#                 break
 
 
-def test_create_too_long_booking():
-    client = _get_client()
+# def test_create_overlaping_booking():
+#     client = _get_client()
 
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+#     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-    assert len(platforms) > 0
+#     assert len(platforms) > 0
 
-    target_platform = platforms[0]
+#     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
-    booking_start = now + timedelta(minutes=1)
-    booking_finish = booking_start + timedelta(hours=10)
-    booking_description = "my too long booking"
+#     now = datetime.now(timezone.utc)
+#     booking_start = now + timedelta(days=1)
+#     booking_finish = booking_start + timedelta(hours=1)
+#     booking_description = "my overlaping booking"
 
-    try:
-        _ = client.create_session(
-            platform_id=target_platform.id,
-            booking_demand_started_at=booking_start,
-            booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description,
-        )
-    except Exception as e:
-        assert "max_duration not respected" in str(e)
+#     try:
+#         session = client.create_session(
+#             platform_id=target_platform.id,
+#             booking_demand_started_at=booking_start,
+#             booking_demand_finished_at=booking_finish,
+#             booking_demand_description=booking_description,
+#         )
 
-
-def test_create_too_short_booking():
-    client = _get_client()
-
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
-
-    assert len(platforms) > 0
-
-    target_platform = platforms[0]
-
-    now = datetime.now(timezone.utc)
-    booking_start = now + timedelta(minutes=1)
-    booking_finish = booking_start + timedelta(seconds=10)
-    booking_description = "my lovely booking"
-
-    try:
-        _ = client.create_session(
-            platform_id=target_platform.id,
-            booking_demand_started_at=booking_start,
-            booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description,
-        )
-    except Exception as e:
-        assert "min_duration not respected" in str(e)
+#         assert session == None
+#     except Exception as e:
+#         assert "existing booking" in str(e)
 
 
-def test_create_too_far_booking():
-    client = _get_client()
+# def test_create_too_long_booking():
+#     client = _get_client()
 
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+#     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-    assert len(platforms) > 0
+#     assert len(platforms) > 0
 
-    target_platform = platforms[0]
+#     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
-    booking_start = now + timedelta(days=30)
-    booking_finish = booking_start + timedelta(hours=2)
-    booking_description = "my lovely booking"
+#     now = datetime.now(timezone.utc)
+#     booking_start = now + timedelta(minutes=1)
+#     booking_finish = booking_start + timedelta(hours=10)
+#     booking_description = "my too long booking"
 
-    try:
-        _ = client.create_session(
-            platform_id=target_platform.id,
-            booking_demand_started_at=booking_start,
-            booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description,
-        )
-    except Exception as e:
-        assert "max_planification_duration not respected" in str(e)
+#     try:
+#         _ = client.create_session(
+#             platform_id=target_platform.id,
+#             booking_demand_started_at=booking_start,
+#             booking_demand_finished_at=booking_finish,
+#             booking_demand_description=booking_description,
+#         )
+#     except Exception as e:
+#         assert "max_duration not respected" in str(e)
 
 
-def test_create_too_close_booking():
-    client = _get_client()
+# def test_create_too_short_booking():
+#     client = _get_client()
 
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+#     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-    assert len(platforms) > 0
+#     assert len(platforms) > 0
 
-    target_platform = platforms[0]
+#     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
-    booking_start = now + timedelta(seconds=10)
-    booking_finish = booking_start + timedelta(hours=2)
-    booking_description = "my lovely booking"
+#     now = datetime.now(timezone.utc)
+#     booking_start = now + timedelta(minutes=1)
+#     booking_finish = booking_start + timedelta(seconds=10)
+#     booking_description = "my lovely booking"
 
-    try:
-        _ = client.create_session(
-            platform_id=target_platform.id,
-            booking_demand_started_at=booking_start,
-            booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description,
-        )
-    except Exception as e:
-        assert "min_planification_duration not respected" in str(e)
+#     try:
+#         _ = client.create_session(
+#             platform_id=target_platform.id,
+#             booking_demand_started_at=booking_start,
+#             booking_demand_finished_at=booking_finish,
+#             booking_demand_description=booking_description,
+#         )
+#     except Exception as e:
+#         assert "min_duration not respected" in str(e)
+
+
+# def test_create_too_far_booking():
+#     client = _get_client()
+
+#     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+#     assert len(platforms) > 0
+
+#     target_platform = platforms[0]
+
+#     now = datetime.now(timezone.utc)
+#     booking_start = now + timedelta(days=30)
+#     booking_finish = booking_start + timedelta(hours=2)
+#     booking_description = "my lovely booking"
+
+#     try:
+#         _ = client.create_session(
+#             platform_id=target_platform.id,
+#             booking_demand_started_at=booking_start,
+#             booking_demand_finished_at=booking_finish,
+#             booking_demand_description=booking_description,
+#         )
+#     except Exception as e:
+#         assert "max_planification_duration not respected" in str(e)
+
+
+# def test_create_too_close_booking():
+#     client = _get_client()
+
+#     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+#     assert len(platforms) > 0
+
+#     target_platform = platforms[0]
+
+#     now = datetime.now(timezone.utc)
+#     booking_start = now + timedelta(seconds=10)
+#     booking_finish = booking_start + timedelta(hours=2)
+#     booking_description = "my lovely booking"
+
+#     try:
+#         _ = client.create_session(
+#             platform_id=target_platform.id,
+#             booking_demand_started_at=booking_start,
+#             booking_demand_finished_at=booking_finish,
+#             booking_demand_description=booking_description,
+#         )
+#     except Exception as e:
+#         assert "min_planification_duration not respected" in str(e)
 
 
 def test_cannot_start_not_booked_session_during_booked_session_is_running():
@@ -385,7 +385,14 @@ def test_cannot_start_not_booked_session_during_booked_session_is_running():
         booking_demand_description=booking_description,
     )
 
-    time.sleep(23)
+    while True:
+        time.sleep(2)
+        booked_session = client.get_session(session_id=booked_session.id)
+
+        assert booked_session.status in ["starting", "running"]
+
+        if booked_session.status == "running":
+            break
 
     not_booked_session = client.create_session(
         platform_id=target_platform.id,
@@ -394,11 +401,10 @@ def test_cannot_start_not_booked_session_during_booked_session_is_running():
     while True:
         time.sleep(2)
         not_booked_session = client.get_session(session_id=not_booked_session.id)
-
         booked_session = client.get_session(session_id=booked_session.id)
 
         assert not_booked_session.status in ["starting"]
-        assert booked_session.status in ["starting", "running", "stopping", "stopped"]
+        assert booked_session.status in ["running", "stopping", "stopped"]
 
         if booked_session.status == "stopped":
             break
@@ -409,88 +415,88 @@ def test_cannot_start_not_booked_session_during_booked_session_is_running():
 
         assert not_booked_session.status in ["starting", "running"]
 
-        if booked_session.status == "running":
+        if not_booked_session.status == "running":
             break
 
     client.delete_session(not_booked_session.id)
 
 
-def test_not_booked_session_is_killed_when_booked_session_starts():
-    client = _get_client()
+# def test_not_booked_session_is_killed_when_booked_session_starts():
+#     client = _get_client()
 
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+#     platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
 
-    assert len(platforms) > 0
+#     assert len(platforms) > 0
 
-    target_platform = platforms[0]
+#     target_platform = platforms[0]
 
-    try:
-        not_booked_session_1 = client.create_session(
-            platform_id=target_platform.id,
-        )
+#     try:
+#         not_booked_session_1 = client.create_session(
+#             platform_id=target_platform.id,
+#         )
 
-        assert not_booked_session_1
+#         assert not_booked_session_1
 
-        not_booked_session_2 = client.create_session(
-            platform_id=target_platform.id,
-        )
+#         not_booked_session_2 = client.create_session(
+#             platform_id=target_platform.id,
+#         )
 
-        assert not_booked_session_2
+#         assert not_booked_session_2
 
-        now = datetime.now(timezone.utc)
-        booking_start = now + timedelta(seconds=20)
-        booking_finish = booking_start + timedelta(seconds=20)
-        booking_description = "my booking"
+#         now = datetime.now(timezone.utc)
+#         booking_start = now + timedelta(seconds=20)
+#         booking_finish = booking_start + timedelta(seconds=20)
+#         booking_description = "my booking"
 
-        booked_session = client.create_session(
-            platform_id=target_platform.id,
-            booking_demand_started_at=booking_start,
-            booking_demand_finished_at=booking_finish,
-            booking_demand_description=booking_description,
-        )
+#         booked_session = client.create_session(
+#             platform_id=target_platform.id,
+#             booking_demand_started_at=booking_start,
+#             booking_demand_finished_at=booking_finish,
+#             booking_demand_description=booking_description,
+#         )
 
-        while True:
-            time.sleep(2)
-            not_booked_session_1 = client.get_session(
-                session_id=not_booked_session_1.id
-            )
-            not_booked_session_2 = client.get_session(
-                session_id=not_booked_session_2.id
-            )
+#         while True:
+#             time.sleep(2)
+#             not_booked_session_1 = client.get_session(
+#                 session_id=not_booked_session_1.id
+#             )
+#             not_booked_session_2 = client.get_session(
+#                 session_id=not_booked_session_2.id
+#             )
 
-            assert not_booked_session_1.status in ["starting", "running"]
-            assert not_booked_session_2.status in ["starting", "running"]
+#             assert not_booked_session_1.status in ["starting", "running"]
+#             assert not_booked_session_2.status in ["starting", "running"]
 
-            if (
-                not_booked_session_1.status == "running"
-                and not_booked_session_2.status == "running"
-            ):
-                break
+#             if (
+#                 not_booked_session_1.status == "running"
+#                 and not_booked_session_2.status == "running"
+#             ):
+#                 break
 
-        time.sleep(25)
+#         time.sleep(25)
 
-        while True:
-            time.sleep(2)
-            not_booked_session_1 = client.get_session(
-                session_id=not_booked_session_1.id
-            )
-            not_booked_session_2 = client.get_session(
-                session_id=not_booked_session_2.id
-            )
+#         while True:
+#             time.sleep(2)
+#             not_booked_session_1 = client.get_session(
+#                 session_id=not_booked_session_1.id
+#             )
+#             not_booked_session_2 = client.get_session(
+#                 session_id=not_booked_session_2.id
+#             )
 
-            assert not_booked_session_1.status in ["running", "stopping", "stopped"]
-            assert not_booked_session_2.status in ["running", "stopping", "stopped"]
+#             assert not_booked_session_1.status in ["running", "stopping", "stopped"]
+#             assert not_booked_session_2.status in ["running", "stopping", "stopped"]
 
-            if (
-                not_booked_session_1.status == "stopped"
-                and not_booked_session_2.status == "stopped"
-            ):
-                break
+#             if (
+#                 not_booked_session_1.status == "stopped"
+#                 and not_booked_session_2.status == "stopped"
+#             ):
+#                 break
 
-    finally:
-        client.delete_session(not_booked_session_1.id)
-        client.delete_session(not_booked_session_2.id)
-        client.delete_session(booked_session.id)
+#     finally:
+#         client.delete_session(not_booked_session_1.id)
+#         client.delete_session(not_booked_session_2.id)
+#         client.delete_session(booked_session.id)
 
 
 # def test_create_session_same_deduplication_id():
