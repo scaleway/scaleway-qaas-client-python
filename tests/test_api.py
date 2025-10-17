@@ -229,7 +229,6 @@ def test_create_and_cancel_booking():
             time.sleep(2)
             booking = client.get_booking(booking_id=session.booking_id)
 
-<<<<<<< HEAD
 def test_create_session_same_deduplication_id():
     client = _get_client()
 
@@ -271,14 +270,6 @@ def test_create_session_same_deduplication_id():
         assert second_session.deduplication_id == session.deduplication_id
     finally:
         client.delete_session(session.id)
-=======
-            print(booking.status)
-
-            assert booking.status in ["validated", "cancelling", "cancelled"]
-
-            if booking.status == "cancelled":
-                break
->>>>>>> f758e18 (feat(booking): ok booking test)
 
 
 def test_create_overlaping_booking():
@@ -575,92 +566,8 @@ def test_not_booked_session_is_killed_when_booked_session_starts():
 
             booked_session = client.get_session(session_id=booked_session.id)
 
-<<<<<<< HEAD
 #             if (
 #                 not_booked_session_1.status == "stopped"
 #                 and not_booked_session_2.status == "stopped"
 #             ):
 #                 break
-=======
-            assert booked_session.status in ["starting", "running"]
-
-            if booked_session.status == "running":
-                break
-
-        while True:
-            time.sleep(2)
-
-            not_booked_session_1 = client.get_session(
-                session_id=not_booked_session_1.id
-            )
-            not_booked_session_2 = client.get_session(
-                session_id=not_booked_session_2.id
-            )
-
-            assert not_booked_session_1.status in ["running", "stopping", "stopped"]
-            assert not_booked_session_2.status in ["running", "stopping", "stopped"]
-
-            if (
-                not_booked_session_1.status == "stopped"
-                and not_booked_session_2.status == "stopped"
-            ):
-                break
-
-        while True:
-            booked_session = client.get_session(booked_session.id)
-
-            assert booked_session.status in ["running", "stopped"]
-
-            if booked_session.status == "stopped":
-                break
-
-    finally:
-        client.delete_session(not_booked_session_1.id)
-        client.delete_session(not_booked_session_2.id)
-        client.delete_session(booked_session.id)
-
-
-def test_create_session_same_deduplication_id():
-    client = _get_client()
-
-    try:
-        platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
-
-        assert len(platforms) > 0
-
-        platform = platforms[0]
-
-        max_duration = "2m"
-        max_idle_duration = "2m"
-        deduplication_id = f"hihaaa-{_RANDOM_UUID}"
-
-        session = client.create_session(
-            platform_id=platform.id,
-            max_duration=max_duration,
-            max_idle_duration=max_idle_duration,
-            deduplication_id=deduplication_id,
-        )
-
-        assert session is not None
-        assert session.id is not None
-        assert session.platform_id == platform.id
-        assert session.deduplication_id == deduplication_id
-        assert session.status in ["starting", "running"]
-
-        second_session = client.create_session(
-            platform_id=platform.id,
-            deduplication_id=deduplication_id,
-        )
-
-        assert second_session != None
-        assert second_session.id == session.id
-        assert second_session.project_id == session.project_id
-        assert second_session.platform_id == session.platform_id
-        assert second_session.name == session.name
-        assert second_session.max_duration == session.max_duration
-        assert second_session.max_idle_duration == session.max_idle_duration
-        assert second_session.status in session.status
-        assert second_session.deduplication_id == session.deduplication_id
-    finally:
-        client.delete_session(session.id)
->>>>>>> f758e18 (feat(booking): ok booking test)
