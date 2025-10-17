@@ -40,7 +40,11 @@ install-test:
 
 .PHONY: test
 test:
-	pytest -s --showprogress -vv tests/
+	pytest -s --showprogress -vv tests/test_api.py
+
+.PHONY: test-booking
+test-booking:
+	pytest -s --showprogress -vv tests/test_booking.py
 
 .PHONY: all
 all: v1alpha1
