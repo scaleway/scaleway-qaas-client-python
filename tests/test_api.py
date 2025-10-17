@@ -214,8 +214,6 @@ def test_create_and_cancel_booking():
             session = client.get_session(session_id=session.id)
             booking = client.get_booking(booking_id=session.booking_id)
 
-            print(session.status, booking.status)
-
             assert session.status in ["starting", "running"]
             assert booking.status in ["waiting", "validating", "validated"]
 
@@ -228,8 +226,6 @@ def test_create_and_cancel_booking():
         while True:
             time.sleep(2)
             booking = client.get_booking(booking_id=session.booking_id)
-
-            print(booking.status)
 
             assert booking.status in ["validated", "cancelling", "cancelled"]
 
