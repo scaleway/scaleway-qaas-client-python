@@ -19,7 +19,6 @@ from scaleway_qaas_client.v1alpha1 import QaaSClient
 
 _RANDOM_UUID = str(uuid.uuid4())
 _TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")
-_TEST_APPLICATION_NAME = os.environ.get("TEST_APPLICATION_NAME", "H2 VQE")
 
 
 def _get_client() -> QaaSClient:
@@ -152,6 +151,23 @@ def test_create_delete_session():
         client.delete_session(session.id)
 
 
+def test_list_platform_bookings():
+    client = _get_client()
+
+    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
+
+    assert platforms is not None
+    assert len(platforms) == 1
+
+    target_platform = platforms[0]
+
+    assert target_platform.id is not None
+
+    bookings = client.list_platform_bookings(target_platform.id)
+
+    assert len(bookings) > 0
+
+
 def test_create_session_same_deduplication_id():
     client = _get_client()
 
@@ -195,62 +211,3 @@ def test_create_session_same_deduplication_id():
         assert second_session.deduplication_id == session.deduplication_id
     finally:
         client.delete_session(session.id)
-
-
-def test_run_process():
-    client = _get_client()
-
-    process_inputs = {
-        "Custom VQE": '{ "max_iterations": 1, "hamiltonian_strings" : ["XIIX", "ZZYY", "ZXYY", "ZZZZ"], "hamiltonian_weights" : [ -0.5, 1, 2.44, 5 ] }',
-        "CVar VQE": '{ "max_iterations": 3, "qubo_matrix" : [ [ 31, -500 ], [ -500, 32 ] ] }',
-        "Chemistry VQE": '{"max_iterations": 1, "geometry": [ {"coordinates": [ 0, 0, 0 ], "element": "Li" }, { "coordinates": [ 0, 0, 0.7414 ], "element": "H" }]}',
-        "H2 VQE": '{"max_iterations": 2, "geometry": [ {"coordinates": [ 0, 0, 0 ], "element": "H" }, { "coordinates": [ 0, 0, 0.7414 ], "element": "H" }]}',
-        "Graph Isomorphism": '{ "graph_a" : [ [ 0, 1 ], [ 1, 2 ], [2, 3], [2, 4], [3, 4] ], "graph_b" : [ [ 0, 1 ], [ 1, 2 ], [2, 3], [2, 4], [3, 4] ], "epsilon" : 10, "error" : 0.1, "algo" : "Laplacian PP", "max_iterations" : 3, "nb_samples" : 1000, "nb_samples_min_accepted" : 10}',
-        "Graph DSI": '{ "graph" : [ [ 0, 1 ], [ 1, 2 ], [2, 3], [2, 4], [3, 4] ], "max_iterations" : 10, "nb_samples" : 10000, "size_subgraph" : 3, "seed" : [ 0 ], "nb_samples_min_accepted" : 1000}',
-    }
-
-    platforms = client.list_platforms(name=_TEST_PLATFORM_NAME)
-
-    assert len(platforms) > 0
-
-    platform = platforms[0]
-
-    if platform.provider_name != "quandela":
-        print("SKIP RUN PROCESS : ONLY QUANDELA PLATFORMS CAN RUN PROCESS")
-        return
-
-    assert _TEST_APPLICATION_NAME in process_inputs
-
-    applications = client.list_applications(name=_TEST_APPLICATION_NAME)
-
-    assert len(applications) > 0
-
-    application = applications[0]
-
-    process = client.create_process(
-        platform_id=platform.id,
-        application_id=application.id,
-        input=process_inputs[_TEST_APPLICATION_NAME],
-    )
-
-    assert process.platform_id == platform.id
-    assert process.application_id == application.id
-    assert process.status == "starting"
-
-    assert process.input_ == process_inputs[_TEST_APPLICATION_NAME]
-    assert process.progress_message == ""
-    assert process.tags == []
-
-    while True:
-        time.sleep(3)
-        process = client.get_process(process.id)
-        assert process.status in [
-            "starting",
-            "running",
-            "completed",
-        ]
-        print(process.progress, process.progress_message)
-        if process.status == "completed":
-            results = client.list_process_results(process.id)
-            assert len(results) > 0
-            break

@@ -65,7 +65,7 @@ def sync_detailed(
      Update booking information of the provided **booking ID**.
 
     Args:
-        booking_id (str): Unique ID of the booking.
+        booking_id (str):
         body (UpdateBookingBody):
 
     Raises:
@@ -99,7 +99,7 @@ def sync(
      Update booking information of the provided **booking ID**.
 
     Args:
-        booking_id (str): Unique ID of the booking.
+        booking_id (str):
         body (UpdateBookingBody):
 
     Raises:
@@ -128,7 +128,7 @@ async def asyncio_detailed(
      Update booking information of the provided **booking ID**.
 
     Args:
-        booking_id (str): Unique ID of the booking.
+        booking_id (str):
         body (UpdateBookingBody):
 
     Raises:
@@ -160,7 +160,7 @@ async def asyncio(
      Update booking information of the provided **booking ID**.
 
     Args:
-        booking_id (str): Unique ID of the booking.
+        booking_id (str):
         body (UpdateBookingBody):
 
     Raises:

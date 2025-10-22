@@ -65,7 +65,7 @@ def sync_detailed(
      Update job information about the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (UpdateJobBody):
 
     Raises:
@@ -99,7 +99,7 @@ def sync(
      Update job information about the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (UpdateJobBody):
 
     Raises:
@@ -128,7 +128,7 @@ async def asyncio_detailed(
      Update job information about the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (UpdateJobBody):
 
     Raises:
@@ -160,7 +160,7 @@ async def asyncio(
      Update job information about the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (UpdateJobBody):
 
     Raises:

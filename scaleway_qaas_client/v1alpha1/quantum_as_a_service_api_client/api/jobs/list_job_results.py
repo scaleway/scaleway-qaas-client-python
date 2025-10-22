@@ -85,11 +85,11 @@ def sync_detailed(
      Retrieve all intermediate and final results of a job.
 
     Args:
-        job_id (str): ID of the job.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListJobResultsOrderBy]): Sort order of the returned results.
-            Default: ListJobResultsOrderBy.CREATED_AT_DESC.
+        job_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListJobResultsOrderBy]):  Default:
+            ListJobResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,11 +128,11 @@ def sync(
      Retrieve all intermediate and final results of a job.
 
     Args:
-        job_id (str): ID of the job.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListJobResultsOrderBy]): Sort order of the returned results.
-            Default: ListJobResultsOrderBy.CREATED_AT_DESC.
+        job_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListJobResultsOrderBy]):  Default:
+            ListJobResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,11 +166,11 @@ async def asyncio_detailed(
      Retrieve all intermediate and final results of a job.
 
     Args:
-        job_id (str): ID of the job.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListJobResultsOrderBy]): Sort order of the returned results.
-            Default: ListJobResultsOrderBy.CREATED_AT_DESC.
+        job_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListJobResultsOrderBy]):  Default:
+            ListJobResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -207,11 +207,11 @@ async def asyncio(
      Retrieve all intermediate and final results of a job.
 
     Args:
-        job_id (str): ID of the job.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListJobResultsOrderBy]): Sort order of the returned results.
-            Default: ListJobResultsOrderBy.CREATED_AT_DESC.
+        job_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListJobResultsOrderBy]):  Default:
+            ListJobResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

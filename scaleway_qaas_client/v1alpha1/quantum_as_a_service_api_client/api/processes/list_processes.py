@@ -95,15 +95,13 @@ def sync_detailed(
      Retrieve information about all processes.
 
     Args:
-        application_id (Union[Unset, str]): List processes that have been created for this
-            application.
-        tags (Union[Unset, list[str]]): List processes with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of processes to return per page.
-        order_by (Union[Unset, ListProcessesOrderBy]): Sort order of the returned processes.
-            Default: ListProcessesOrderBy.CREATED_AT_DESC.
-        project_id (str): List processes belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        application_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessesOrderBy]):  Default:
+            ListProcessesOrderBy.CREATED_AT_DESC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -144,15 +142,13 @@ def sync(
      Retrieve information about all processes.
 
     Args:
-        application_id (Union[Unset, str]): List processes that have been created for this
-            application.
-        tags (Union[Unset, list[str]]): List processes with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of processes to return per page.
-        order_by (Union[Unset, ListProcessesOrderBy]): Sort order of the returned processes.
-            Default: ListProcessesOrderBy.CREATED_AT_DESC.
-        project_id (str): List processes belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        application_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessesOrderBy]):  Default:
+            ListProcessesOrderBy.CREATED_AT_DESC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -188,15 +184,13 @@ async def asyncio_detailed(
      Retrieve information about all processes.
 
     Args:
-        application_id (Union[Unset, str]): List processes that have been created for this
-            application.
-        tags (Union[Unset, list[str]]): List processes with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of processes to return per page.
-        order_by (Union[Unset, ListProcessesOrderBy]): Sort order of the returned processes.
-            Default: ListProcessesOrderBy.CREATED_AT_DESC.
-        project_id (str): List processes belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        application_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessesOrderBy]):  Default:
+            ListProcessesOrderBy.CREATED_AT_DESC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -235,15 +229,13 @@ async def asyncio(
      Retrieve information about all processes.
 
     Args:
-        application_id (Union[Unset, str]): List processes that have been created for this
-            application.
-        tags (Union[Unset, list[str]]): List processes with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of processes to return per page.
-        order_by (Union[Unset, ListProcessesOrderBy]): Sort order of the returned processes.
-            Default: ListProcessesOrderBy.CREATED_AT_DESC.
-        project_id (str): List processes belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        application_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessesOrderBy]):  Default:
+            ListProcessesOrderBy.CREATED_AT_DESC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

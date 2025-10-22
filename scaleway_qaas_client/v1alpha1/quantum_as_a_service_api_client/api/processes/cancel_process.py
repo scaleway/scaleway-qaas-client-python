@@ -65,7 +65,7 @@ def sync_detailed(
      Cancel a process by its unique ID. Intermediate results are still available.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (CancelProcessBody):
 
     Raises:
@@ -99,7 +99,7 @@ def sync(
      Cancel a process by its unique ID. Intermediate results are still available.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (CancelProcessBody):
 
     Raises:
@@ -128,7 +128,7 @@ async def asyncio_detailed(
      Cancel a process by its unique ID. Intermediate results are still available.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (CancelProcessBody):
 
     Raises:
@@ -160,7 +160,7 @@ async def asyncio(
      Cancel a process by its unique ID. Intermediate results are still available.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (CancelProcessBody):
 
     Raises:

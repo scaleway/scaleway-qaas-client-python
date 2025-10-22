@@ -95,14 +95,12 @@ def sync_detailed(
      Retrieve information about all sessions.
 
     Args:
-        platform_id (Union[Unset, str]): List sessions that have been created for this platform.
-        tags (Union[Unset, list[str]]): List sessions with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of sessions to return per page.
-        order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
-            Default: ListSessionsOrderBy.NAME_ASC.
-        project_id (str): List sessions belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListSessionsOrderBy]):  Default: ListSessionsOrderBy.NAME_ASC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,14 +141,12 @@ def sync(
      Retrieve information about all sessions.
 
     Args:
-        platform_id (Union[Unset, str]): List sessions that have been created for this platform.
-        tags (Union[Unset, list[str]]): List sessions with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of sessions to return per page.
-        order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
-            Default: ListSessionsOrderBy.NAME_ASC.
-        project_id (str): List sessions belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListSessionsOrderBy]):  Default: ListSessionsOrderBy.NAME_ASC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -186,14 +182,12 @@ async def asyncio_detailed(
      Retrieve information about all sessions.
 
     Args:
-        platform_id (Union[Unset, str]): List sessions that have been created for this platform.
-        tags (Union[Unset, list[str]]): List sessions with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of sessions to return per page.
-        order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
-            Default: ListSessionsOrderBy.NAME_ASC.
-        project_id (str): List sessions belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListSessionsOrderBy]):  Default: ListSessionsOrderBy.NAME_ASC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -232,14 +226,12 @@ async def asyncio(
      Retrieve information about all sessions.
 
     Args:
-        platform_id (Union[Unset, str]): List sessions that have been created for this platform.
-        tags (Union[Unset, list[str]]): List sessions with these tags.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of sessions to return per page.
-        order_by (Union[Unset, ListSessionsOrderBy]): Sort order of the returned sessions.
-            Default: ListSessionsOrderBy.NAME_ASC.
-        project_id (str): List sessions belonging to this project ID. (UUID format) Example:
-            6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        tags (Union[Unset, list[str]]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListSessionsOrderBy]):  Default: ListSessionsOrderBy.NAME_ASC.
+        project_id (str):  Example: 6170692e-7363-616c-6577-61792e636f6d.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

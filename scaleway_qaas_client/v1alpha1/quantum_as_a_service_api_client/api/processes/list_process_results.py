@@ -85,11 +85,11 @@ def sync_detailed(
      Retrieve all intermediate and final result of a process.
 
     Args:
-        process_id (str): ID of the process.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListProcessResultsOrderBy]): Sort order of the returned results.
-            Default: ListProcessResultsOrderBy.CREATED_AT_DESC.
+        process_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessResultsOrderBy]):  Default:
+            ListProcessResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,11 +128,11 @@ def sync(
      Retrieve all intermediate and final result of a process.
 
     Args:
-        process_id (str): ID of the process.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListProcessResultsOrderBy]): Sort order of the returned results.
-            Default: ListProcessResultsOrderBy.CREATED_AT_DESC.
+        process_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessResultsOrderBy]):  Default:
+            ListProcessResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,11 +166,11 @@ async def asyncio_detailed(
      Retrieve all intermediate and final result of a process.
 
     Args:
-        process_id (str): ID of the process.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListProcessResultsOrderBy]): Sort order of the returned results.
-            Default: ListProcessResultsOrderBy.CREATED_AT_DESC.
+        process_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessResultsOrderBy]):  Default:
+            ListProcessResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -207,11 +207,11 @@ async def asyncio(
      Retrieve all intermediate and final result of a process.
 
     Args:
-        process_id (str): ID of the process.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListProcessResultsOrderBy]): Sort order of the returned results.
-            Default: ListProcessResultsOrderBy.CREATED_AT_DESC.
+        process_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListProcessResultsOrderBy]):  Default:
+            ListProcessResultsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

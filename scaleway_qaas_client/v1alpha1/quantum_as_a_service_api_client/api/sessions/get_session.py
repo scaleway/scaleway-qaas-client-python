@@ -55,7 +55,7 @@ def sync_detailed(
     jobs.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -87,7 +87,7 @@ def sync(
     jobs.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -114,7 +114,7 @@ async def asyncio_detailed(
     jobs.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -144,7 +144,7 @@ async def asyncio(
     jobs.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

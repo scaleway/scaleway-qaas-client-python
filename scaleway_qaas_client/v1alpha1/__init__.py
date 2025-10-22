@@ -25,6 +25,9 @@ from .job_payload.models import (
 from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1Application as QaaSApplication,
 )
+from .quantum_as_a_service_api_client.models import (
+    ScalewayQaasV1Alpha1Booking as QaaSBooking,
+)
 from .quantum_as_a_service_api_client.models import ScalewayQaasV1Alpha1Job as QaaSJob
 from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1JobResult as QaaSJobResult,
@@ -43,6 +46,9 @@ from .quantum_as_a_service_api_client.models import (
 )
 from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1PlatformAvailability as QaaSPlatformAvailability,
+)
+from .quantum_as_a_service_api_client.models import (
+    ScalewayQaasV1Alpha1PlatformBookingRequirement as QaaSBookingRequirements,
 )
 from .quantum_as_a_service_api_client.models import (
     ScalewayQaasV1Alpha1PlatformTechnology as QaaSPlatformTechnology,

@@ -379,6 +379,11 @@ components:
         progress_message:
           type: string
           description: Any progress message of the booking.
+        time_zone:
+          type: string
+          description: Time zone for the booking schedule, in tz database format (e.g.
+            'Europe/Paris').
+          nullable: true
       x-properties-order:
       - id
       - created_at
@@ -388,6 +393,7 @@ components:
       - status
       - description
       - progress_message
+      - time_zone
     scaleway.qaas.v1alpha1.Job:
       type: object
       properties:
@@ -863,11 +869,30 @@ components:
                 can be booked in the future. (in seconds)
               example: 2.5s
               nullable: true
+            min_planification_duration:
+              type: string
+              description: Minimum planification time before a platform can be booked.
+                (in seconds)
+              example: 2.5s
+              nullable: true
+            max_booking_per_week:
+              type: integer
+              description: Maximum amount of booking allowed for one organization
+                per week.
+              format: uint32
+            max_booking_per_day:
+              type: integer
+              description: Maximum amount of booking allowed for one organization
+                per day.
+              format: uint32
           x-properties-order:
           - min_duration
           - max_duration
           - max_cancellation_duration
           - max_planification_duration
+          - min_planification_duration
+          - max_booking_per_week
+          - max_booking_per_day
         description:
           type: string
           description: English description of the platform.
@@ -1172,13 +1197,11 @@ paths:
         description: List applications with this name.
         schema:
           type: string
-          description: List applications with this name.
       - in: query
         name: application_type
         description: List applications with this type.
         schema:
           type: string
-          description: List applications with this type.
           enum:
           - unknown_type
           - vqe
@@ -1192,21 +1215,18 @@ paths:
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of applications a to return per page.
         schema:
           type: integer
-          description: Maximum number of applications a to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned applications.
         schema:
           type: string
-          description: Sort order of the returned applications.
           enum:
           - name_asc
           - name_desc
@@ -1247,7 +1267,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the application.
       responses:
         "200":
           description: ""
@@ -1281,34 +1300,29 @@ paths:
         description: List bookings belonging to this project ID. (UUID format)
         schema:
           type: string
-          description: List bookings belonging to this project ID. (UUID format)
           example: 6170692e-7363-616c-6577-61792e636f6d
       - in: query
         name: platform_id
         description: List bookings attached to this platform ID.
         schema:
           type: string
-          description: List bookings attached to this platform ID.
       - in: query
         name: page
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of results to return per page.
         schema:
           type: integer
-          description: Maximum number of results to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned results.
         schema:
           type: string
-          description: Sort order of the returned results.
           enum:
           - created_at_desc
           - created_at_asc
@@ -1349,7 +1363,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the booking.
       responses:
         "200":
           description: ""
@@ -1382,7 +1395,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the booking.
       responses:
         "200":
           description: ""
@@ -1430,7 +1442,6 @@ paths:
         description: List jobs with these tags.
         schema:
           type: array
-          description: List jobs with these tags.
           items:
             type: string
       - in: query
@@ -1438,21 +1449,18 @@ paths:
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of jobs to return per page.
         schema:
           type: integer
-          description: Maximum number of jobs to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned jobs.
         schema:
           type: string
-          description: Sort order of the returned jobs.
           enum:
           - created_at_desc
           - created_at_asc
@@ -1600,7 +1608,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the job you want to get.
       responses:
         "200":
           description: ""
@@ -1633,7 +1640,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the job.
       responses:
         "200":
           description: ""
@@ -1688,7 +1694,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the job.
       responses:
         "204":
           description: ""
@@ -1718,7 +1723,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the job.
       responses:
         "200":
           description: ""
@@ -1760,7 +1764,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the job.
       responses:
         "200":
           description: ""
@@ -1794,27 +1797,23 @@ paths:
         required: true
         schema:
           type: string
-          description: ID of the job.
       - in: query
         name: page
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of results to return per page.
         schema:
           type: integer
-          description: Maximum number of results to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned results.
         schema:
           type: string
-          description: Sort order of the returned results.
           enum:
           - created_at_desc
           - created_at_asc
@@ -1853,27 +1852,23 @@ paths:
         required: true
         schema:
           type: string
-          description: List models belonging to this project ID.
       - in: query
         name: page
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of results to return per page.
         schema:
           type: integer
-          description: Maximum number of results to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned results.
         schema:
           type: string
-          description: Sort order of the returned results.
           enum:
           - created_at_desc
           - created_at_asc
@@ -1958,7 +1953,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the model.
       responses:
         "200":
           description: ""
@@ -1991,25 +1985,21 @@ paths:
         description: List platforms with this provider name.
         schema:
           type: string
-          description: List platforms with this provider name.
       - in: query
         name: backend_name
         description: List platforms with this backend name.
         schema:
           type: string
-          description: List platforms with this backend name.
       - in: query
         name: name
         description: List platforms with this name.
         schema:
           type: string
-          description: List platforms with this name.
       - in: query
         name: platform_type
         description: List platforms with this type.
         schema:
           type: string
-          description: List platforms with this type.
           enum:
           - unknown_type
           - simulator
@@ -2020,7 +2010,6 @@ paths:
         description: List platforms with this technology.
         schema:
           type: string
-          description: List platforms with this technology.
           enum:
           - unknown_technology
           - photonic
@@ -2034,21 +2023,18 @@ paths:
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of platforms to return per page.
         schema:
           type: integer
-          description: Maximum number of platforms to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned platforms.
         schema:
           type: string
-          description: Sort order of the returned platforms.
           enum:
           - name_asc
           - name_desc
@@ -2095,7 +2081,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the platform.
       responses:
         "200":
           description: ""
@@ -2128,13 +2113,11 @@ paths:
         description: List processes that have been created for this application.
         schema:
           type: string
-          description: List processes that have been created for this application.
       - in: query
         name: tags
         description: List processes with these tags.
         schema:
           type: array
-          description: List processes with these tags.
           items:
             type: string
       - in: query
@@ -2142,21 +2125,18 @@ paths:
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of processes to return per page.
         schema:
           type: integer
-          description: Maximum number of processes to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned processes.
         schema:
           type: string
-          description: Sort order of the returned processes.
           enum:
           - created_at_desc
           - created_at_asc
@@ -2173,7 +2153,6 @@ paths:
         required: true
         schema:
           type: string
-          description: List processes belonging to this project ID. (UUID format)
           example: 6170692e-7363-616c-6577-61792e636f6d
       responses:
         "200":
@@ -2290,7 +2269,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the process.
       responses:
         "200":
           description: ""
@@ -2323,7 +2301,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the process.
       responses:
         "200":
           description: ""
@@ -2378,7 +2355,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the process.
       responses:
         "204":
           description: ""
@@ -2409,7 +2385,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the process.
       responses:
         "200":
           description: ""
@@ -2451,27 +2426,23 @@ paths:
         required: true
         schema:
           type: string
-          description: ID of the process.
       - in: query
         name: page
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of results to return per page.
         schema:
           type: integer
-          description: Maximum number of results to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned results.
         schema:
           type: string
-          description: Sort order of the returned results.
           enum:
           - created_at_desc
           - created_at_asc
@@ -2508,13 +2479,11 @@ paths:
         description: List sessions that have been created for this platform.
         schema:
           type: string
-          description: List sessions that have been created for this platform.
       - in: query
         name: tags
         description: List sessions with these tags.
         schema:
           type: array
-          description: List sessions with these tags.
           items:
             type: string
       - in: query
@@ -2522,21 +2491,18 @@ paths:
         description: Page number.
         schema:
           type: integer
-          description: Page number.
           format: int32
       - in: query
         name: page_size
         description: Maximum number of sessions to return per page.
         schema:
           type: integer
-          description: Maximum number of sessions to return per page.
           format: uint32
       - in: query
         name: order_by
         description: Sort order of the returned sessions.
         schema:
           type: string
-          description: Sort order of the returned sessions.
           enum:
           - name_asc
           - name_desc
@@ -2553,7 +2519,6 @@ paths:
         required: true
         schema:
           type: string
-          description: List sessions belonging to this project ID. (UUID format)
           example: 6170692e-7363-616c-6577-61792e636f6d
       responses:
         "200":
@@ -2647,10 +2612,13 @@ paths:
                       nullable: true
                     description:
                       $ref: '#/components/schemas/google.protobuf.StringValue'
+                    time_zone:
+                      $ref: '#/components/schemas/google.protobuf.StringValue'
                   x-properties-order:
                   - started_at
                   - finished_at
                   - description
+                  - time_zone
                 model_id:
                   type: string
                   description: Default computation model ID to be executed by job
@@ -2706,7 +2674,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the session.
       responses:
         "200":
           description: ""
@@ -2739,7 +2706,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the session.
       responses:
         "200":
           description: ""
@@ -2808,7 +2774,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the session.
       responses:
         "204":
           description: ""
@@ -2880,7 +2845,6 @@ paths:
         required: true
         schema:
           type: string
-          description: Unique ID of the session.
       responses:
         "200":
           description: ""

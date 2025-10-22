@@ -65,7 +65,7 @@ def sync_detailed(
      Cancel the job corresponding to the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (CancelJobBody):
 
     Raises:
@@ -99,7 +99,7 @@ def sync(
      Cancel the job corresponding to the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (CancelJobBody):
 
     Raises:
@@ -128,7 +128,7 @@ async def asyncio_detailed(
      Cancel the job corresponding to the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (CancelJobBody):
 
     Raises:
@@ -160,7 +160,7 @@ async def asyncio(
      Cancel the job corresponding to the provided **job ID**.
 
     Args:
-        job_id (str): Unique ID of the job.
+        job_id (str):
         body (CancelJobBody):
 
     Raises:

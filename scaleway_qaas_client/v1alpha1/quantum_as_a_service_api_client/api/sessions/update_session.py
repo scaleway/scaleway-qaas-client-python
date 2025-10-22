@@ -65,7 +65,7 @@ def sync_detailed(
      Update session information of the provided **session ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (UpdateSessionBody):
 
     Raises:
@@ -99,7 +99,7 @@ def sync(
      Update session information of the provided **session ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (UpdateSessionBody):
 
     Raises:
@@ -128,7 +128,7 @@ async def asyncio_detailed(
      Update session information of the provided **session ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (UpdateSessionBody):
 
     Raises:
@@ -160,7 +160,7 @@ async def asyncio(
      Update session information of the provided **session ID**.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (UpdateSessionBody):
 
     Raises:

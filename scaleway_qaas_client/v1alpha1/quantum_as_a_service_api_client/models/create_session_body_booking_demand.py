@@ -19,11 +19,13 @@ class CreateSessionBodyBookingDemand:
         started_at (Union[None, Unset, datetime.datetime]): (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
         finished_at (Union[None, Unset, datetime.datetime]): (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
         description (Union[None, Unset, str]):
+        time_zone (Union[None, Unset, str]):
     """
 
     started_at: Union[None, Unset, datetime.datetime] = UNSET
     finished_at: Union[None, Unset, datetime.datetime] = UNSET
     description: Union[None, Unset, str] = UNSET
+    time_zone: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,6 +51,12 @@ class CreateSessionBodyBookingDemand:
         else:
             description = self.description
 
+        time_zone: Union[None, Unset, str]
+        if isinstance(self.time_zone, Unset):
+            time_zone = UNSET
+        else:
+            time_zone = self.time_zone
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -58,6 +66,8 @@ class CreateSessionBodyBookingDemand:
             field_dict["finished_at"] = finished_at
         if description is not UNSET:
             field_dict["description"] = description
+        if time_zone is not UNSET:
+            field_dict["time_zone"] = time_zone
 
         return field_dict
 
@@ -108,10 +118,20 @@ class CreateSessionBodyBookingDemand:
 
         description = _parse_description(d.pop("description", UNSET))
 
+        def _parse_time_zone(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        time_zone = _parse_time_zone(d.pop("time_zone", UNSET))
+
         create_session_body_booking_demand = cls(
             started_at=started_at,
             finished_at=finished_at,
             description=description,
+            time_zone=time_zone,
         )
 
         create_session_body_booking_demand.additional_properties = d

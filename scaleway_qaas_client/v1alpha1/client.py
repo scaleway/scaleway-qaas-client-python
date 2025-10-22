@@ -16,6 +16,7 @@ from typing import Dict, List, Optional, Union
 
 import randomname
 from pytimeparse.timeparse import timeparse
+from datetime import datetime
 
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.applications.get_application import (
     sync_detailed as _get_application_sync,
@@ -89,6 +90,12 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.sessions.
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.sessions.terminate_session import (
     sync_detailed as _terminate_session_sync,
 )
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.bookings.get_booking import (
+    sync_detailed as _get_booking_sync,
+)
+from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.api.bookings.list_bookings import (
+    sync_detailed as _list_bookings_sync,
+)
 from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.client import (
     AuthenticatedClient,
 )
@@ -100,12 +107,14 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.models import
     CreateModelBody,
     CreateProcessBody,
     CreateSessionBody,
+    CreateSessionBodyBookingDemand,
     ListPlatformsPlatformTechnology,
     ListPlatformsPlatformType,
     ScalewayQaasV1Alpha1Application,
     ScalewayQaasV1Alpha1Job,
     ScalewayQaasV1Alpha1JobResult,
     ScalewayQaasV1Alpha1Model,
+    ScalewayQaasV1Alpha1Booking,
     ScalewayQaasV1Alpha1Platform,
     ScalewayQaasV1Alpha1Process,
     ScalewayQaasV1Alpha1ProcessResult,
@@ -239,6 +248,9 @@ class QaaSClient:
         name: Optional[str] = None,
         model_id: Optional[str] = None,
         parameters: Optional[Union[Dict, List, str]] = None,
+        booking_demand_started_at: Optional[datetime] = None,
+        booking_demand_finished_at: Optional[datetime] = None,
+        booking_demand_description: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
         """Create a session
 
@@ -252,6 +264,9 @@ class QaaSClient:
             max_duration (Union[None, Unset, str]): Maximum duration before the session ends. (in seconds) Example: 20m.
             deduplication_id (Union[None, Unset, str]): Deduplication ID of the session.
             model_id (Union[None, Unset, str]): Default computation model ID to be executed by job assigned to this session.
+            booking_demand_started_at (Union[None, Unset, datetime.datetime]): Wished started UTC time for an exclusive session over a QPU, only works if the platform is_bookable (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
+            booking_demand_finished_at (Union[None, Unset, datetime.datetime]): Wished finished UTC time for an exclusive session over a QPU, only works if the platform is_bookable (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
+            booking_demand_description (Union[None, Unset, str]): User description of the booking
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -260,6 +275,16 @@ class QaaSClient:
         Returns:
             ScalewayQaasV1Alpha1Session
         """
+
+        if not booking_demand_started_at and booking_demand_finished_at:
+            raise Exception(
+                "booking_demand_started_at and booking_demand_finished_at must be set"
+            )
+
+        if booking_demand_started_at and not booking_demand_finished_at:
+            raise Exception(
+                "booking_demand_started_at and booking_demand_finished_at must be set"
+            )
 
         if not platform_id:
             raise Exception("create_session: platform_id cannot be None")
@@ -277,6 +302,16 @@ class QaaSClient:
         if isinstance(max_idle_duration, str):
             max_idle_duration = f"{timeparse(max_idle_duration)}s"
 
+        booking_demand = UNSET
+
+        if booking_demand_started_at and booking_demand_finished_at:
+            booking_demand = CreateSessionBodyBookingDemand(
+                started_at=booking_demand_started_at,
+                finished_at=booking_demand_finished_at,
+                description=booking_demand_description,
+                time_zone="UTC",
+            )
+
         response = _create_session_sync(
             client=self.__client,
             body=CreateSessionBody(
@@ -288,6 +323,7 @@ class QaaSClient:
                 max_idle_duration=max_idle_duration,
                 model_id=model_id,
                 parameters=parameters,
+                booking_demand=booking_demand,
             ),
         )
 
@@ -890,3 +926,85 @@ class QaaSClient:
         _raise_on_error(response)
 
         return response.parsed.models
+
+    def get_booking(self, booking_id: str) -> ScalewayQaasV1Alpha1Booking:
+        """Get booking information
+
+        Retrieve information about the provided **booking ID**, such as description, status and progress
+        message.
+
+        Args:
+            booking_id (str): Unique ID of the booking.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1Booking]
+        """
+
+        if not booking_id:
+            raise Exception("get_booking: booking_id cannot be None")
+
+        response = _get_booking_sync(client=self.__client, booking_id=booking_id)
+
+        _raise_on_error(response)
+
+        return response.parsed
+
+    def list_platform_bookings(
+        self, platform_id: str
+    ) -> List[ScalewayQaasV1Alpha1Booking]:
+        """List all bookings of the target platform
+
+        Retrieve information about all bookings of the provided ** platform ID**.
+
+        Args:
+            platform_id (Union[Unset, str]): List bookings attached to this platform ID.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1ListBookingsResponse]
+        """
+
+        response = _list_bookings_sync(client=self.__client, platform_id=platform_id)
+
+        _raise_on_error(response)
+
+        return response.parsed.bookings
+
+    def list_bookings(
+        self, platform_id: Optional[str] = None
+    ) -> List[ScalewayQaasV1Alpha1Booking]:
+        """List all bookings according of the current project
+
+        Retrieve information about all bookings of the project ID, can be filtered by platform ID.
+
+        Args:
+            platform_id (Union[Unset, str]): Will list only bookings attached to this platform ID.
+
+        Raises:
+            errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
+            httpx.TimeoutException: If the request takes longer than Client.timeout.
+
+        Returns:
+            Response[ScalewayQaasV1Alpha1ListBookingsResponse]
+        """
+        if platform_id:
+            response = _list_bookings_sync(
+                client=self.__client,
+                platform_id=platform_id,
+                project_id=self.__project_id,
+            )
+        else:
+            response = _list_bookings_sync(
+                client=self.__client, project_id=self.__project_id
+            )
+
+        _raise_on_error(response)
+
+        return response.parsed.bookings

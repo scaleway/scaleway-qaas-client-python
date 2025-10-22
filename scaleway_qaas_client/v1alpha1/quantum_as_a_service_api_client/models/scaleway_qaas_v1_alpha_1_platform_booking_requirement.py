@@ -22,12 +22,19 @@ class ScalewayQaasV1Alpha1PlatformBookingRequirement:
             before the beginning of the session. (in seconds) Example: 2.5s.
         max_planification_duration (Union[None, Unset, str]): Allowed planification time from now where the platform can
             be booked in the future. (in seconds) Example: 2.5s.
+        min_planification_duration (Union[None, Unset, str]): Minimum planification time before a platform can be
+            booked. (in seconds) Example: 2.5s.
+        max_booking_per_week (Union[Unset, int]): Maximum amount of booking allowed for one organization per week.
+        max_booking_per_day (Union[Unset, int]): Maximum amount of booking allowed for one organization per day.
     """
 
     min_duration: Union[None, Unset, str] = UNSET
     max_duration: Union[None, Unset, str] = UNSET
     max_cancellation_duration: Union[None, Unset, str] = UNSET
     max_planification_duration: Union[None, Unset, str] = UNSET
+    min_planification_duration: Union[None, Unset, str] = UNSET
+    max_booking_per_week: Union[Unset, int] = UNSET
+    max_booking_per_day: Union[Unset, int] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -55,6 +62,16 @@ class ScalewayQaasV1Alpha1PlatformBookingRequirement:
         else:
             max_planification_duration = self.max_planification_duration
 
+        min_planification_duration: Union[None, Unset, str]
+        if isinstance(self.min_planification_duration, Unset):
+            min_planification_duration = UNSET
+        else:
+            min_planification_duration = self.min_planification_duration
+
+        max_booking_per_week = self.max_booking_per_week
+
+        max_booking_per_day = self.max_booking_per_day
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -66,6 +83,12 @@ class ScalewayQaasV1Alpha1PlatformBookingRequirement:
             field_dict["max_cancellation_duration"] = max_cancellation_duration
         if max_planification_duration is not UNSET:
             field_dict["max_planification_duration"] = max_planification_duration
+        if min_planification_duration is not UNSET:
+            field_dict["min_planification_duration"] = min_planification_duration
+        if max_booking_per_week is not UNSET:
+            field_dict["max_booking_per_week"] = max_booking_per_week
+        if max_booking_per_day is not UNSET:
+            field_dict["max_booking_per_day"] = max_booking_per_day
 
         return field_dict
 
@@ -113,11 +136,29 @@ class ScalewayQaasV1Alpha1PlatformBookingRequirement:
             d.pop("max_planification_duration", UNSET)
         )
 
+        def _parse_min_planification_duration(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        min_planification_duration = _parse_min_planification_duration(
+            d.pop("min_planification_duration", UNSET)
+        )
+
+        max_booking_per_week = d.pop("max_booking_per_week", UNSET)
+
+        max_booking_per_day = d.pop("max_booking_per_day", UNSET)
+
         scaleway_qaas_v1_alpha_1_platform_booking_requirement = cls(
             min_duration=min_duration,
             max_duration=max_duration,
             max_cancellation_duration=max_cancellation_duration,
             max_planification_duration=max_planification_duration,
+            min_planification_duration=min_planification_duration,
+            max_booking_per_week=max_booking_per_week,
+            max_booking_per_day=max_booking_per_day,
         )
 
         scaleway_qaas_v1_alpha_1_platform_booking_requirement.additional_properties = d

@@ -65,7 +65,7 @@ def sync_detailed(
      Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (TerminateSessionBody):
 
     Raises:
@@ -99,7 +99,7 @@ def sync(
      Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (TerminateSessionBody):
 
     Raises:
@@ -128,7 +128,7 @@ async def asyncio_detailed(
      Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (TerminateSessionBody):
 
     Raises:
@@ -160,7 +160,7 @@ async def asyncio(
      Terminate a session by its unique ID and cancel all its attached jobs and booking.
 
     Args:
-        session_id (str): Unique ID of the session.
+        session_id (str):
         body (TerminateSessionBody):
 
     Raises:
