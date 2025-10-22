@@ -54,7 +54,7 @@ def sync_detailed(
      Retrieve information about the provided **job ID**, such as status, payload, and result.
 
     Args:
-        job_id (str): Unique ID of the job you want to get.
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -85,7 +85,7 @@ def sync(
      Retrieve information about the provided **job ID**, such as status, payload, and result.
 
     Args:
-        job_id (str): Unique ID of the job you want to get.
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -111,7 +111,7 @@ async def asyncio_detailed(
      Retrieve information about the provided **job ID**, such as status, payload, and result.
 
     Args:
-        job_id (str): Unique ID of the job you want to get.
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -140,7 +140,7 @@ async def asyncio(
      Retrieve information about the provided **job ID**, such as status, payload, and result.
 
     Args:
-        job_id (str): Unique ID of the job you want to get.
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

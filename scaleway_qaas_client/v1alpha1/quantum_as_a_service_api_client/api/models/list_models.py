@@ -81,11 +81,10 @@ def sync_detailed(
      Retrieve information about all models of the provided **project ID**.
 
     Args:
-        project_id (str): List models belonging to this project ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListModelsOrderBy]): Sort order of the returned results. Default:
-            ListModelsOrderBy.CREATED_AT_DESC.
+        project_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListModelsOrderBy]):  Default: ListModelsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -122,11 +121,10 @@ def sync(
      Retrieve information about all models of the provided **project ID**.
 
     Args:
-        project_id (str): List models belonging to this project ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListModelsOrderBy]): Sort order of the returned results. Default:
-            ListModelsOrderBy.CREATED_AT_DESC.
+        project_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListModelsOrderBy]):  Default: ListModelsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -158,11 +156,10 @@ async def asyncio_detailed(
      Retrieve information about all models of the provided **project ID**.
 
     Args:
-        project_id (str): List models belonging to this project ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListModelsOrderBy]): Sort order of the returned results. Default:
-            ListModelsOrderBy.CREATED_AT_DESC.
+        project_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListModelsOrderBy]):  Default: ListModelsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -197,11 +194,10 @@ async def asyncio(
      Retrieve information about all models of the provided **project ID**.
 
     Args:
-        project_id (str): List models belonging to this project ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListModelsOrderBy]): Sort order of the returned results. Default:
-            ListModelsOrderBy.CREATED_AT_DESC.
+        project_id (str):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListModelsOrderBy]):  Default: ListModelsOrderBy.CREATED_AT_DESC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

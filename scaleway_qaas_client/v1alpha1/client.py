@@ -127,6 +127,8 @@ from scaleway_qaas_client.v1alpha1.quantum_as_a_service_api_client.types import 
     Response,
 )
 
+from scaleway_qaas_client.v1alpha1.utils import get_local_iana_timezone, is_valid_iana
+
 _DEFAULT_URL = "https://api.scaleway.com"
 
 
@@ -251,6 +253,7 @@ class QaaSClient:
         booking_demand_started_at: Optional[datetime] = None,
         booking_demand_finished_at: Optional[datetime] = None,
         booking_demand_description: Optional[str] = None,
+        booking_demand_time_zone: Optional[str] = None,
     ) -> ScalewayQaasV1Alpha1Session:
         """Create a session
 
@@ -267,6 +270,7 @@ class QaaSClient:
             booking_demand_started_at (Union[None, Unset, datetime.datetime]): Wished started time for an exclusive session over a QPU, only works if the platform is_bookable (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
             booking_demand_finished_at (Union[None, Unset, datetime.datetime]): Wished finished time for an exclusive session over a QPU, only works if the platform is_bookable (RFC 3339 format) Example: 2022-03-22T12:34:56.123456Z.
             booking_demand_description (Union[None, Unset, str]): User description of the booking
+            booking_demand_time_zone (Union[None, Unset, str]): Time zone of the demanded booking (eg: Europe/Paris, America/New_York...)
 
         Raises:
             errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -309,13 +313,21 @@ class QaaSClient:
             booking_demand_finished_at_timestamp = (
                 booking_demand_finished_at.timestamp()
             )
-            # seconds = int(booking_demand_started_at_timestamp)
-            # nanos = int(booking_demand_started_at_timestamp % 1 * 1e9)
+
+            if booking_demand_time_zone is not None and not is_valid_iana(
+                booking_demand_time_zone
+            ):
+                raise Exception(
+                    f"create_session: invalid time zone {booking_demand_time_zone} as IANA format"
+                )
+            else:
+                time_zone = get_local_iana_timezone()
 
             booking_demand = CreateSessionBodyBookingDemand(
                 started_at=booking_demand_started_at_timestamp,
                 finished_at=booking_demand_finished_at_timestamp,
                 description=booking_demand_description,
+                time_zone=time_zone,
             )
 
         response = _create_session_sync(

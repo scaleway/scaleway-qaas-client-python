@@ -96,13 +96,13 @@ def sync_detailed(
      Retrieve information about all applications.
 
     Args:
-        name (Union[Unset, str]): List applications with this name.
-        application_type (Union[Unset, ListApplicationsApplicationType]): List applications with
-            this type. Default: ListApplicationsApplicationType.UNKNOWN_TYPE.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of applications a to return per page.
-        order_by (Union[Unset, ListApplicationsOrderBy]): Sort order of the returned applications.
-            Default: ListApplicationsOrderBy.NAME_ASC.
+        name (Union[Unset, str]):
+        application_type (Union[Unset, ListApplicationsApplicationType]):  Default:
+            ListApplicationsApplicationType.UNKNOWN_TYPE.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListApplicationsOrderBy]):  Default:
+            ListApplicationsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,13 +143,13 @@ def sync(
      Retrieve information about all applications.
 
     Args:
-        name (Union[Unset, str]): List applications with this name.
-        application_type (Union[Unset, ListApplicationsApplicationType]): List applications with
-            this type. Default: ListApplicationsApplicationType.UNKNOWN_TYPE.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of applications a to return per page.
-        order_by (Union[Unset, ListApplicationsOrderBy]): Sort order of the returned applications.
-            Default: ListApplicationsOrderBy.NAME_ASC.
+        name (Union[Unset, str]):
+        application_type (Union[Unset, ListApplicationsApplicationType]):  Default:
+            ListApplicationsApplicationType.UNKNOWN_TYPE.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListApplicationsOrderBy]):  Default:
+            ListApplicationsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -185,13 +185,13 @@ async def asyncio_detailed(
      Retrieve information about all applications.
 
     Args:
-        name (Union[Unset, str]): List applications with this name.
-        application_type (Union[Unset, ListApplicationsApplicationType]): List applications with
-            this type. Default: ListApplicationsApplicationType.UNKNOWN_TYPE.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of applications a to return per page.
-        order_by (Union[Unset, ListApplicationsOrderBy]): Sort order of the returned applications.
-            Default: ListApplicationsOrderBy.NAME_ASC.
+        name (Union[Unset, str]):
+        application_type (Union[Unset, ListApplicationsApplicationType]):  Default:
+            ListApplicationsApplicationType.UNKNOWN_TYPE.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListApplicationsOrderBy]):  Default:
+            ListApplicationsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -230,13 +230,13 @@ async def asyncio(
      Retrieve information about all applications.
 
     Args:
-        name (Union[Unset, str]): List applications with this name.
-        application_type (Union[Unset, ListApplicationsApplicationType]): List applications with
-            this type. Default: ListApplicationsApplicationType.UNKNOWN_TYPE.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of applications a to return per page.
-        order_by (Union[Unset, ListApplicationsOrderBy]): Sort order of the returned applications.
-            Default: ListApplicationsOrderBy.NAME_ASC.
+        name (Union[Unset, str]):
+        application_type (Union[Unset, ListApplicationsApplicationType]):  Default:
+            ListApplicationsApplicationType.UNKNOWN_TYPE.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListApplicationsOrderBy]):  Default:
+            ListApplicationsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

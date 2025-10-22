@@ -51,7 +51,7 @@ def sync_detailed(
      Delete a process by its unique ID and delete all its data.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -82,7 +82,7 @@ async def asyncio_detailed(
      Delete a process by its unique ID and delete all its data.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

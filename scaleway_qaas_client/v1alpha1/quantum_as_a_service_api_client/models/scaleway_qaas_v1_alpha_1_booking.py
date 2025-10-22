@@ -31,6 +31,8 @@ class ScalewayQaasV1Alpha1Booking:
             ScalewayQaasV1Alpha1BookingStatus.UNKNOWN_STATUS.
         description (Union[Unset, str]): Description of the booking slot.
         progress_message (Union[Unset, str]): Any progress message of the booking.
+        time_zone (Union[None, Unset, str]): Time zone for the booking schedule, in tz database format (e.g.
+            'Europe/Paris').
     """
 
     id: Union[Unset, str] = UNSET
@@ -43,6 +45,7 @@ class ScalewayQaasV1Alpha1Booking:
     )
     description: Union[Unset, str] = UNSET
     progress_message: Union[Unset, str] = UNSET
+    time_zone: Union[None, Unset, str] = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -88,6 +91,12 @@ class ScalewayQaasV1Alpha1Booking:
 
         progress_message = self.progress_message
 
+        time_zone: Union[None, Unset, str]
+        if isinstance(self.time_zone, Unset):
+            time_zone = UNSET
+        else:
+            time_zone = self.time_zone
+
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -107,6 +116,8 @@ class ScalewayQaasV1Alpha1Booking:
             field_dict["description"] = description
         if progress_message is not UNSET:
             field_dict["progress_message"] = progress_message
+        if time_zone is not UNSET:
+            field_dict["time_zone"] = time_zone
 
         return field_dict
 
@@ -194,6 +205,15 @@ class ScalewayQaasV1Alpha1Booking:
 
         progress_message = d.pop("progress_message", UNSET)
 
+        def _parse_time_zone(data: object) -> Union[None, Unset, str]:
+            if data is None:
+                return data
+            if isinstance(data, Unset):
+                return data
+            return cast(Union[None, Unset, str], data)
+
+        time_zone = _parse_time_zone(d.pop("time_zone", UNSET))
+
         scaleway_qaas_v1_alpha_1_booking = cls(
             id=id,
             created_at=created_at,
@@ -203,6 +223,7 @@ class ScalewayQaasV1Alpha1Booking:
             status=status,
             description=description,
             progress_message=progress_message,
+            time_zone=time_zone,
         )
 
         scaleway_qaas_v1_alpha_1_booking.additional_properties = d

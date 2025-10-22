@@ -13,9 +13,9 @@
 # limitations under the License.
 import os
 import time
-import uuid
 
 from datetime import datetime, timedelta, timezone
+
 from scaleway_qaas_client.v1alpha1 import QaaSClient
 
 _TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")

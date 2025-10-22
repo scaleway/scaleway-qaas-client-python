@@ -65,7 +65,7 @@ def sync_detailed(
      Update process information of the provided **process ID**.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (UpdateProcessBody):
 
     Raises:
@@ -99,7 +99,7 @@ def sync(
      Update process information of the provided **process ID**.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (UpdateProcessBody):
 
     Raises:
@@ -128,7 +128,7 @@ async def asyncio_detailed(
      Update process information of the provided **process ID**.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (UpdateProcessBody):
 
     Raises:
@@ -160,7 +160,7 @@ async def asyncio(
      Update process information of the provided **process ID**.
 
     Args:
-        process_id (str): Unique ID of the process.
+        process_id (str):
         body (UpdateProcessBody):
 
     Raises:

@@ -87,12 +87,11 @@ def sync_detailed(
      Retrieve information about all bookings of the provided **project ID** or ** platform ID**.
 
     Args:
-        project_id (Union[Unset, str]): List bookings belonging to this project ID. (UUID format)
-            Example: 6170692e-7363-616c-6577-61792e636f6d.
-        platform_id (Union[Unset, str]): List bookings attached to this platform ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListBookingsOrderBy]): Sort order of the returned results. Default:
+        project_id (Union[Unset, str]):  Example: 6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListBookingsOrderBy]):  Default:
             ListBookingsOrderBy.CREATED_AT_DESC.
 
     Raises:
@@ -132,12 +131,11 @@ def sync(
      Retrieve information about all bookings of the provided **project ID** or ** platform ID**.
 
     Args:
-        project_id (Union[Unset, str]): List bookings belonging to this project ID. (UUID format)
-            Example: 6170692e-7363-616c-6577-61792e636f6d.
-        platform_id (Union[Unset, str]): List bookings attached to this platform ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListBookingsOrderBy]): Sort order of the returned results. Default:
+        project_id (Union[Unset, str]):  Example: 6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListBookingsOrderBy]):  Default:
             ListBookingsOrderBy.CREATED_AT_DESC.
 
     Raises:
@@ -172,12 +170,11 @@ async def asyncio_detailed(
      Retrieve information about all bookings of the provided **project ID** or ** platform ID**.
 
     Args:
-        project_id (Union[Unset, str]): List bookings belonging to this project ID. (UUID format)
-            Example: 6170692e-7363-616c-6577-61792e636f6d.
-        platform_id (Union[Unset, str]): List bookings attached to this platform ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListBookingsOrderBy]): Sort order of the returned results. Default:
+        project_id (Union[Unset, str]):  Example: 6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListBookingsOrderBy]):  Default:
             ListBookingsOrderBy.CREATED_AT_DESC.
 
     Raises:
@@ -215,12 +212,11 @@ async def asyncio(
      Retrieve information about all bookings of the provided **project ID** or ** platform ID**.
 
     Args:
-        project_id (Union[Unset, str]): List bookings belonging to this project ID. (UUID format)
-            Example: 6170692e-7363-616c-6577-61792e636f6d.
-        platform_id (Union[Unset, str]): List bookings attached to this platform ID.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of results to return per page.
-        order_by (Union[Unset, ListBookingsOrderBy]): Sort order of the returned results. Default:
+        project_id (Union[Unset, str]):  Example: 6170692e-7363-616c-6577-61792e636f6d.
+        platform_id (Union[Unset, str]):
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListBookingsOrderBy]):  Default:
             ListBookingsOrderBy.CREATED_AT_DESC.
 
     Raises:

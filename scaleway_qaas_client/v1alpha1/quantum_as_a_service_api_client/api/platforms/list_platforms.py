@@ -117,17 +117,16 @@ def sync_detailed(
      Retrieve information about all platforms.
 
     Args:
-        provider_name (Union[Unset, str]): List platforms with this provider name.
-        backend_name (Union[Unset, str]): List platforms with this backend name.
-        name (Union[Unset, str]): List platforms with this name.
-        platform_type (Union[Unset, ListPlatformsPlatformType]): List platforms with this type.
-            Default: ListPlatformsPlatformType.UNKNOWN_TYPE.
-        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]): List platforms with
-            this technology. Default: ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of platforms to return per page.
-        order_by (Union[Unset, ListPlatformsOrderBy]): Sort order of the returned platforms.
-            Default: ListPlatformsOrderBy.NAME_ASC.
+        provider_name (Union[Unset, str]):
+        backend_name (Union[Unset, str]):
+        name (Union[Unset, str]):
+        platform_type (Union[Unset, ListPlatformsPlatformType]):  Default:
+            ListPlatformsPlatformType.UNKNOWN_TYPE.
+        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]):  Default:
+            ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListPlatformsOrderBy]):  Default: ListPlatformsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -176,17 +175,16 @@ def sync(
      Retrieve information about all platforms.
 
     Args:
-        provider_name (Union[Unset, str]): List platforms with this provider name.
-        backend_name (Union[Unset, str]): List platforms with this backend name.
-        name (Union[Unset, str]): List platforms with this name.
-        platform_type (Union[Unset, ListPlatformsPlatformType]): List platforms with this type.
-            Default: ListPlatformsPlatformType.UNKNOWN_TYPE.
-        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]): List platforms with
-            this technology. Default: ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of platforms to return per page.
-        order_by (Union[Unset, ListPlatformsOrderBy]): Sort order of the returned platforms.
-            Default: ListPlatformsOrderBy.NAME_ASC.
+        provider_name (Union[Unset, str]):
+        backend_name (Union[Unset, str]):
+        name (Union[Unset, str]):
+        platform_type (Union[Unset, ListPlatformsPlatformType]):  Default:
+            ListPlatformsPlatformType.UNKNOWN_TYPE.
+        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]):  Default:
+            ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListPlatformsOrderBy]):  Default: ListPlatformsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -230,17 +228,16 @@ async def asyncio_detailed(
      Retrieve information about all platforms.
 
     Args:
-        provider_name (Union[Unset, str]): List platforms with this provider name.
-        backend_name (Union[Unset, str]): List platforms with this backend name.
-        name (Union[Unset, str]): List platforms with this name.
-        platform_type (Union[Unset, ListPlatformsPlatformType]): List platforms with this type.
-            Default: ListPlatformsPlatformType.UNKNOWN_TYPE.
-        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]): List platforms with
-            this technology. Default: ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of platforms to return per page.
-        order_by (Union[Unset, ListPlatformsOrderBy]): Sort order of the returned platforms.
-            Default: ListPlatformsOrderBy.NAME_ASC.
+        provider_name (Union[Unset, str]):
+        backend_name (Union[Unset, str]):
+        name (Union[Unset, str]):
+        platform_type (Union[Unset, ListPlatformsPlatformType]):  Default:
+            ListPlatformsPlatformType.UNKNOWN_TYPE.
+        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]):  Default:
+            ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListPlatformsOrderBy]):  Default: ListPlatformsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -287,17 +284,16 @@ async def asyncio(
      Retrieve information about all platforms.
 
     Args:
-        provider_name (Union[Unset, str]): List platforms with this provider name.
-        backend_name (Union[Unset, str]): List platforms with this backend name.
-        name (Union[Unset, str]): List platforms with this name.
-        platform_type (Union[Unset, ListPlatformsPlatformType]): List platforms with this type.
-            Default: ListPlatformsPlatformType.UNKNOWN_TYPE.
-        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]): List platforms with
-            this technology. Default: ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
-        page (Union[Unset, int]): Page number.
-        page_size (Union[Unset, int]): Maximum number of platforms to return per page.
-        order_by (Union[Unset, ListPlatformsOrderBy]): Sort order of the returned platforms.
-            Default: ListPlatformsOrderBy.NAME_ASC.
+        provider_name (Union[Unset, str]):
+        backend_name (Union[Unset, str]):
+        name (Union[Unset, str]):
+        platform_type (Union[Unset, ListPlatformsPlatformType]):  Default:
+            ListPlatformsPlatformType.UNKNOWN_TYPE.
+        platform_technology (Union[Unset, ListPlatformsPlatformTechnology]):  Default:
+            ListPlatformsPlatformTechnology.UNKNOWN_TECHNOLOGY.
+        page (Union[Unset, int]):
+        page_size (Union[Unset, int]):
+        order_by (Union[Unset, ListPlatformsOrderBy]):  Default: ListPlatformsOrderBy.NAME_ASC.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
