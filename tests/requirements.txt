@@ -2,3 +2,4 @@ pytest
 pytest-dependency
 pytest-progress
 pytest-httpx
+pytz

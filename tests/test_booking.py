@@ -13,12 +13,21 @@
 # limitations under the License.
 import os
 import time
+import pytz
 
 from datetime import datetime, timedelta, timezone
 
 from scaleway_qaas_client.v1alpha1 import QaaSClient
 
 _TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")
+
+
+def _get_now_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def _get_now_paris() -> datetime:
+    return datetime.now(pytz.timezone("Europe/Paris"))
 
 
 def _get_client() -> QaaSClient:
@@ -41,8 +50,8 @@ def test_create_and_cancel_booking():
     target_platform = platforms[0]
 
     try:
-        now = datetime.now(timezone.utc)
-        booking_start = now + timedelta(seconds=15)
+        now = _get_now_paris()
+        booking_start = now + timedelta(seconds=16)
         booking_finish = booking_start + timedelta(seconds=20)
         booking_description = "my lovely booking"
 
@@ -100,7 +109,7 @@ def test_create_overlaping_booking():
 
     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
+    now = _get_now_paris()
     booking_start = now + timedelta(days=1)
     booking_finish = booking_start + timedelta(hours=1)
     booking_description = "my overlaping booking"
@@ -127,7 +136,7 @@ def test_create_too_long_booking():
 
     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
+    now = _get_now_paris()
     booking_start = now + timedelta(minutes=1)
     booking_finish = booking_start + timedelta(hours=10)
     booking_description = "my too long booking"
@@ -152,7 +161,7 @@ def test_create_too_short_booking():
 
     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
+    now = _get_now_paris()
     booking_start = now + timedelta(minutes=1)
     booking_finish = booking_start + timedelta(seconds=10)
     booking_description = "my lovely booking"
@@ -177,7 +186,7 @@ def test_create_too_far_booking():
 
     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
+    now = _get_now_paris()
     booking_start = now + timedelta(days=30)
     booking_finish = booking_start + timedelta(hours=2)
     booking_description = "my lovely booking"
@@ -202,7 +211,7 @@ def test_create_too_close_booking():
 
     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
+    now = _get_now_paris()
     booking_start = now + timedelta(seconds=10)
     booking_finish = booking_start + timedelta(hours=2)
     booking_description = "my lovely booking"
@@ -227,7 +236,7 @@ def test_stop_too_close_booking():
 
     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
+    now = _get_now_paris()
     booking_start = now + timedelta(seconds=20)
     booking_finish = booking_start + timedelta(seconds=30)
     booking_description = "my lovely booking"
@@ -273,7 +282,7 @@ def test_cannot_start_not_booked_session_during_booked_session_is_running():
 
     target_platform = platforms[0]
 
-    now = datetime.now(timezone.utc)
+    now = _get_now_paris()
     booking_start = now + timedelta(seconds=20)
     booking_finish = booking_start + timedelta(seconds=20)
     booking_description = "my booking"
@@ -347,7 +356,7 @@ def test_not_booked_session_is_killed_when_booked_session_starts():
 
         assert not_booked_session_2
 
-        now = datetime.now(timezone.utc)
+        now = _get_now_paris()
         booking_start = now + timedelta(seconds=20)
         booking_finish = booking_start + timedelta(seconds=20)
         booking_description = "my booking"
