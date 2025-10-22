@@ -127,9 +127,6 @@ def test_create_delete_session():
             max_idle_duration=max_idle_duration,
         )
 
-        print(session.updated_at)
-        print(session.created_at)
-
         assert session is not None
         assert session.id is not None
         assert session.platform_id == target_platform.id
