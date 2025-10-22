@@ -33,10 +33,10 @@ jobs:
       run: pip install dist/scaleway_qaas_client-${version}-py3-none-any.whl
 
     - name: Install test
-      run: pip install -r tests/requirements.txt
+      run: make install-test
 
     - name: Run test
-      run: pytest -s --showprogress -vv tests/
+      run: make test
       env:
         SCALEWAY_PROJECT_ID: ${{ secrets.STG_SCALEWAY_PROJECT_ID }}
         SCALEWAY_SECRET_KEY: ${{ secrets.STG_SCALEWAY_API_TOKEN }}
