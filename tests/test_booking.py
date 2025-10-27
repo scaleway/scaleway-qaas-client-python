@@ -51,8 +51,8 @@ def test_create_and_cancel_booking():
 
     try:
         now = _get_now_paris()
-        booking_start = now + timedelta(seconds=16)
-        booking_finish = booking_start + timedelta(seconds=20)
+        booking_start = now + timedelta(days=7)
+        booking_finish = booking_start + timedelta(hours=1)
         booking_description = "my lovely booking"
 
         session = client.create_session(
