@@ -19,7 +19,7 @@ from datetime import datetime, timedelta, timezone
 
 from scaleway_qaas_client.v1alpha1 import QaaSClient
 
-_TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "aer_simulation_pop_c16m128")
+_TEST_PLATFORM_NAME = os.environ.get("TEST_PLATFORM_NAME", "EMU-AER-16C-128M")
 
 
 def _get_now_utc() -> datetime:
@@ -28,6 +28,10 @@ def _get_now_utc() -> datetime:
 
 def _get_now_paris() -> datetime:
     return datetime.now(pytz.timezone("Europe/Paris"))
+
+
+def _get_round_now_paris() -> datetime:
+    return _get_now_paris().replace(minute=0, second=0, microsecond=0)
 
 
 def _get_client() -> QaaSClient:
@@ -50,7 +54,7 @@ def test_create_and_cancel_booking():
     target_platform = platforms[0]
 
     try:
-        now = _get_now_paris()
+        now = _get_round_now_paris()
         booking_start = now + timedelta(days=7)
         booking_finish = booking_start + timedelta(hours=1)
         booking_description = "my lovely booking"
