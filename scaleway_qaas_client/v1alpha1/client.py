@@ -489,7 +489,7 @@ class QaaSClient:
         if payload:
             payload = payload if isinstance(payload, str) else json.dumps(payload)
 
-        if parameters:
+        if parameters is not None:
             parameters = (
                 parameters if isinstance(parameters, str) else json.dumps(parameters)
             )
